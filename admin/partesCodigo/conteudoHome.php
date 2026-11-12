@@ -9,7 +9,6 @@
     <ul>
         <li><a href="#">Cadastrar frete</a></li>
         <li><a href="#">Consultar fretes</a></li>
-        <li><a href="#">Cadastrar veículo</a></li>
         <li><a href="#">Consultar motoristas</a></li>
     </ul>
 </main>

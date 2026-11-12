@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <?php include("../partesCodigo/head.php"); ?>
+    <?php include("../partesCodigo/header.php"); ?>
 
     <?php include("../partesCodigo/menu.php"); ?>
 
