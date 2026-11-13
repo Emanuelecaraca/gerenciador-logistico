@@ -76,7 +76,7 @@
 
     <div class="card-body">
 
-        <form method="post">
+        <form method="post" action="../php/veiculos.php">
 
             <div class="mb-3">
 
@@ -89,6 +89,36 @@
 
                     <option value="">Selecione o transportador</option>
 
+                    <?php
+
+                        // Verifica se tem transportadores já cadastrados.
+                        if (!empty($_SESSION['transportadores'])) {
+
+                            // Percorre todos os transportadores cadastrados.
+                            foreach ($_SESSION['transportadores'] as $transportador) {
+
+                    ?>  <!-- FECHA PRA ESCREVER HTML -->
+
+                                <!-- Exibe cada transportador como uma opção. -->
+                                <option value="<?php echo $transportador['id']; ?>">
+                                    <?php echo htmlspecialchars($transportador['nome']); ?>
+                                </option>
+
+                    <?php // ABRE PRA VOLTAR A LÓGICA
+                            }
+
+                        }else {
+
+                    ?>
+
+                        <option value="">Nenhum transportador cadastrado</option>
+
+                    <?php
+
+                        }
+
+                    ?>
+            
                 </select>
                 
             </div>
@@ -99,17 +129,9 @@
                     Placa
                 </label>
                 
-                <input type="text" name="placa" id="placa" class="form-control">
+                <input type="text" name="placa" id="placa" class="form-control" value="<?php echo htmlspecialchars($_GET['filtroPlaca'] ?? ''); ?>">
             </div>
 
-             <div class="mb-3">
-                
-                <label for="modelo" class="form-label">
-                    Modelo
-                </label>
-                
-                <input type="text" name="modelo" id="modelo" class="form-control">
-            </div>
             
             <div class="mb-3">
                 
@@ -141,7 +163,7 @@
 </div>
 
 
-<!-- CARD DE CONSULTA DE TRANSPORTADORES -->
+<!--CONSULTA DE TRANSPORTADORES -->
 <div class="card mb-4">
 
     <!-- Cabeçalho -->
@@ -195,7 +217,7 @@
 
                 <!-- Corpo tabela -->
                 <tbody>
-                    
+
                     <?php
 
                         // Verifica se já existe algum transportador.
@@ -243,6 +265,203 @@
                                     Nenhum transportador encontrado.
                                 </td>
                             </tr>
+
+                    <?php
+
+                        }
+
+                    ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- CONSULTA DE VEÍCULOS -->
+<div class="card mb-4">
+
+    <div class="card-header">
+        <h5>Consultar Veículos</h5>
+    </div>
+
+    <div class="card-body">
+        <!-- Formulário de pesquisa de veículos -->
+<form method="get" class="mb-3">
+
+    <!-- Campo de pesquisa pela placa -->
+    <div class="mb-3">
+
+        <label for="filtroPlaca" class="form-label">
+            Pesquisar pela placa
+        </label>
+
+        <input type="text"name="filtroPlaca"id="filtroPlaca"class="form-control" placeholder="Digite a placa do veículo" value="<?php echo htmlspecialchars($_GET['filtroPlaca'] ?? ''); ?>" >
+
+    </div>
+
+    <!-- Seleção de transportador -->
+    <div class="mb-3">
+
+        <label for="filtroTransportador" class="form-label">
+            Transportador
+        </label>
+
+        <select
+            name="filtroTransportador"
+            id="filtroTransportador"
+            class="form-select"
+        >
+
+            <option value="">Todos os transportadores</option>
+
+            <?php
+
+                // Percorre os transportadores cadastrados.
+                foreach ($_SESSION['transportadores'] as $transportador) {
+
+            ?>
+
+               
+            <option
+                value="<?php echo $transportador['id']; ?>"
+                <?php
+                    if (($_GET['filtroTransportador'] ?? '') == $transportador['id']) {
+                        echo 'selected';
+                    }
+                ?>
+            >
+                <?php echo htmlspecialchars($transportador['nome']); ?>
+            </option>
+
+
+            <?php
+
+                }
+
+            ?>
+
+        </select>
+
+    </div>
+
+    <button type="submit" class="btn btn-secondary" >
+        Pesquisar
+    </button>
+
+    <a href="transportadores.php" class="btn btn-outline-secondary">
+        Limpar pesquisa
+    </a>
+
+</form>
+        <!-- Tabela de veículos cadastrados -->
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped">
+
+                <!-- Cabeçalho da tabela -->
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Transportador</th>
+                        <th>Placa</th>
+                        <th>Tipo</th>
+                    </tr>
+                </thead>
+
+                <!-- Corpo da tabela -->
+                <tbody>
+
+                    <?php
+
+                        // Recebe os filtros enviados pelo formulário.
+                        $filtroPlaca = trim($_GET['filtroPlaca'] ?? '');
+                        $filtroTransportador = trim($_GET['filtroTransportador'] ?? '');
+
+                        // Verifica se existem veículos cadastrados.
+                        if (!empty($_SESSION['veiculos'])) {
+
+                            // Percorre todos os veículos cadastrados.
+                            foreach ($_SESSION['veiculos'] as $veiculo) {
+
+                                // Procura o nome do transportador vinculado.
+                                $nomeTransportador = '';
+
+                                // Procura o transportador vinculado ao veículo.
+                                foreach ($_SESSION['transportadores'] as $transportador) {
+
+                                    if ($transportador['id'] == $veiculo['transportador']) {
+
+                                        $nomeTransportador = $transportador['nome'];
+
+                                        break;
+                                    }
+                                }
+
+                            // Verifica se a placa corresponde à pesquisa.
+                            $placaCorresponde = (
+                                $filtroPlaca == '' ||
+                                stripos($veiculo['placa'], $filtroPlaca) !== false
+                            );
+                            // Verifica se o transportador corresponde à pesquisa.
+                                    $transportadorCorresponde = (
+                                        $filtroTransportador == '' ||
+                                        $filtroTransportador == $veiculo['transportador']
+                                    );
+
+                                    // Exibe somente os veículos que correspondem aos filtros.
+                                    if ($placaCorresponde && $transportadorCorresponde) {
+
+                                        $encontrou = true;
+
+                        ?>
+
+                        <!--Exibe os dados de cada veículo -->
+                        <tr>
+                            <td><?php echo $veiculo['id']; ?></td>
+                            <td><?php echo htmlspecialchars($nomeTransportador); ?></td>
+                            <td><?php echo htmlspecialchars($veiculo['placa']); ?></td>
+                            <td><?php echo htmlspecialchars($veiculo['tipo']); ?></td>
+                        </tr>
+
+                    <?php
+
+                            }
+
+                        } 
+
+                         // Caso nenhum veículo corresponda à pesquisa.
+                        if (!$encontrou) {
+
+                    ?>
+
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Nenhum veículo encontrado.
+                        </td>
+                    </tr>
+
+
+
+                    <?php
+
+                        }
+
+                       } else {
+
+                    ?>
+
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Nenhum veículo cadastrado.
+                            </td>
+                        </tr>
 
                     <?php
 
