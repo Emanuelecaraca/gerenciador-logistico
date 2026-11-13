@@ -1,6 +1,14 @@
 
-<?php include("../partesCodigo/head.php"); ?>
+<?php
 
+    // Inicia a sessão para permitir o acesso aos transportadores cadastrados.
+    session_start();
+    
+
+    // Inclui o conteúdo do cabeçalho da página.
+    include("../partesCodigo/head.php");
+
+?>
 <body>
 
 

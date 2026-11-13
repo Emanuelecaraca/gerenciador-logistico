@@ -14,7 +14,7 @@
 
         <div class="card-body">
 
-            <form method="post">
+            <form method="post" action="../php/transportadores.php">
 
                 <div class="mb-3">
 
@@ -193,15 +193,62 @@
                     </tr>
                 </thead>
 
-                <!-- Corpo da tabela -->
+                <!-- Corpo tabela -->
                 <tbody>
+                    
+                    <?php
 
-                    <!-- Mensagem inicial -->
-                    <tr>
-                        <td colspan="6" class="text-center">
-                            Nenhum transportador encontrado.
-                        </td>
-                    </tr>
+                        // Verifica se já existe algum transportador.
+                        if (!empty($_SESSION['transportadores'])) {
+
+                            // Percorre a lista de transportadores cadastrados.
+                            foreach ($_SESSION['transportadores'] as $transportador) {
+
+                    ?>
+
+                        <!-- Cria uma linha para cada transportador encontrado -->
+                        <tr>
+
+                            
+                            <td><?php echo $transportador['id']; ?></td>
+
+                            
+                            <td><?php echo htmlspecialchars($transportador['nome']); ?></td>
+
+                            
+                            <td><?php echo htmlspecialchars($transportador['documento']); ?></td>
+
+                            
+                            <td><?php echo htmlspecialchars($transportador['telefone']); ?></td>
+
+                            
+                            <td><?php echo htmlspecialchars($transportador['email']); ?></td>
+
+                             
+                            <td>Ações</td>
+
+                        </tr>
+
+                    <?php
+
+                            }
+
+                        } else {
+
+                            // Exibe uma mensagem caso ainda não existam transportadores.
+                    ?>
+
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    Nenhum transportador encontrado.
+                                </td>
+                            </tr>
+
+                    <?php
+
+                        }
+
+                    ?>
 
                 </tbody>
 
