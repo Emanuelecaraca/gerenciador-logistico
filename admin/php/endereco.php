@@ -7,6 +7,30 @@
 		$_SESSION['endereco'] = [];
 	}
 
+	//Verificar solicitação de edição de endereço
+	if (isset($_GET["id"])) {
+
+		$id = $_GET['id'];
+
+		//Procura o endereço pelo ID
+		foreach($_SESSION['endereco'] as $endereco){
+
+			if ($endereco['id'] == $id) {
+
+				$_SESSION['endereco_edicao'] = $endereco;
+
+
+
+				break;
+			}
+		}
+
+
+		// Retorna para a página de endereços.
+	    header("Location: ../paginas/endereco.php");
+	    exit;
+	}
+
 	// Verifica se o formulário foi enviado pelo método POST.
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -71,10 +95,15 @@
 		];
 	}
 
+
+	// Limpa os dados da edição após salvar.
+	unset($_SESSION['endereco_edicao']);
+	
 	//retornar para página enredeço
 	header("Location: ../paginas/endereco.php");
 	exit;
 
+	}
 }
 
 ?>

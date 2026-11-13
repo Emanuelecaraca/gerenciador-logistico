@@ -1,3 +1,9 @@
+<?php
+	// Verifica se existe um endereço selecionado para edição.
+	$enderecoEdicao = $_SESSION['endereco_edicao'] ?? null;
+	
+?>
+
 <!-- PRINCIPAL -->
 <div class="container mt-4">
 
@@ -16,44 +22,46 @@
 		<div class="card-body">
 			<form action="../php/endereco.php" method="post">
 
+				<input type="hidden" name="id" value="<?php echo $enderecoEdicao['id'] ?? ''; ?>">
+
 				<!-- cep -->
 				<div class="mb-3">
 					<label for="cep" class="form-label">Cep</label>
-					<input type="text" name="cep" id="cep" class="form-control" placeholder="Digite o CEP" required>
+					<input type="text" name="cep" id="cep" class="form-control" placeholder="Digite o CEP" value="<?php echo $enderecoEdicao['cep'] ?? ''; ?>" required>
 				</div>
 
 				<!-- Rua -->
 				<div class="mb-3">
 					<label for="rua" class="form-label">Rua</label>
-					<input type="text" name="rua" id="rua" class="form-control" placeholder="Digite o nome da Rua" required>
+					<input type="text" name="rua" id="rua" class="form-control" placeholder="Digite o nome da Rua" value="<?php echo htmlspecialchars($enderecoEdicao['rua'] ?? ''); ?>" required>
 				</div>
 
 				<!-- numero -->
 				<div class="mb-3">
 					<label for="numero" class="form-label">Número</label>
-					<input type="text" name="numero" id="numero" class="form-control" placeholder="Digite o Número" required>
+					<input type="text" name="numero" id="numero" class="form-control" placeholder="Digite o Número" value="<?php echo htmlspecialchars($enderecoEdicao['numero'] ?? ''); ?>" required>
 				</div>
 
 				<!-- BAIRRO -->
 				<div class="mb-3">
 					<label for="bairro" class="form-label">Bairro</label>
-					<input type="text" name="bairro" id="bairro" class="form-control" placeholder="Digite o Bairro" required>
+					<input type="text" name="bairro" id="bairro" class="form-control" placeholder="Digite o Bairro" value="<?php echo htmlspecialchars($enderecoEdicao['bairro'] ?? ''); ?>" required>
 				</div>
 
 				<!-- CIDADE -->
 				<div class="mb-3">
 					<label for="cidade" class="form-label">Cidade</label>
-					<input type="text" name="cidade" id="cidade" class="form-control" placeholder="Digite a Cidade" required>
+					<input type="text" name="cidade" id="cidade" class="form-control" placeholder="Digite a Cidade" value="<?php echo htmlspecialchars($enderecoEdicao['cidade'] ?? ''); ?>" required>
 				</div>
 
 				<!-- ESTADO -->
 				<div class="mb-3">
 					<label for="estado" class="form-label">Estado</label>
-					<input type="text" name="estado" id="estado" class="form-control" placeholder="Ex: PR" maxlength="2" required>
+					<input type="text" name="estado" id="estado" class="form-control" placeholder="Ex: PR" maxlength="2" value="<?php echo htmlspecialchars($enderecoEdicao['estado'] ?? ''); ?>" required>
 				</div>
 
 				<button type="submit" class="btn btn-primary">
-					Cadastrar Endereço
+					<?php echo $enderecoEdicao ? 'Atualizar Endereço' : 'Cadastrar Endereço'; ?>
 				</button>
 
 
@@ -85,6 +93,8 @@
 	                    <th>Bairro</th>
 	                    <th>Cidade</th>
 	                    <th>Estado</th>
+						<th>Ações</th>
+
 	                </tr>
 	            </thead>
 
@@ -105,7 +115,12 @@
 	                            <td><?php echo htmlspecialchars($endereco['bairro']); ?></td>
 	                            <td><?php echo htmlspecialchars($endereco['cidade']); ?></td>
 	                            <td><?php echo htmlspecialchars($endereco['estado']); ?></td>
-	                        </tr>
+	                            <td>
+								    <a href="../php/endereco.php?id=<?php echo $endereco['id']; ?>" class="btn btn-warning btn-sm">
+								        Editar
+								    </a>
+								</td>
+							</tr>
 
 	                    <?php endforeach; ?><!-- ENCERRAR -->
 
