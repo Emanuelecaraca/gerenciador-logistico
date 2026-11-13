@@ -4,9 +4,10 @@
 
     <ul>
         <li><a href="home.php">Início</a></li>
+        <li><a href="produtos.php">Produtos</a></li>
+        <li><a href="endereco.php">Endereços</a></li>
+        <li><a href="#">Transportador</a></li>
         <li><a href="fretes.php">Fretes</a></li>
-        <li><a href="#">Veículos</a></li>
-        <li><a href="#">Motoristas</a></li>
         <li><a href="#">Relatórios</a></li>
     </ul>
 </nav>

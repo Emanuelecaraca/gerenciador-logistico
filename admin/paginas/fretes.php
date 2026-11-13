@@ -1,8 +1,8 @@
-<head>
-    <meta charset="UTF-8">
-    <title>Fretes</title>
-</head>
+
+<?php include("../partesCodigo/head.php"); ?>
+
 <body>
+
 
     <?php include("../partesCodigo/header.php"); ?>
 

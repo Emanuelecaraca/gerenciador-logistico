@@ -1,9 +1,7 @@
 
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Home</title>
-</head>
+
+<?php include("../partesCodigo/head.php"); ?>
+
 <body>
 
     <?php include("../partesCodigo/header.php"); ?>
@@ -13,4 +11,4 @@
     <?php include("../partesCodigo/conteudoHome.php"); ?>
 
 </body>
-</html>
+
