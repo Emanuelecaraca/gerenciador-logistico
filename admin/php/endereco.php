@@ -8,7 +8,7 @@
 	}
 
 	// Verifica se o formulário foi enviado pelo método POST.
-	if ($_SERVER['REQUEST_METHOD'] == 'POST')
+	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 		// Se sim, recebe os dados enviados pelo formulário.
 		//trim() remove espaços desnecessários no início e no final.
@@ -29,23 +29,52 @@
 			$estado != ''
 
 		) {
-			// IDENTIFICADOR ENDEREÇO
-			$id = count($_SESSION['endereco']) + 1;
 
-			//Adicionar o endereço na lista
-			$_SESSION['endereco'][]=[
-				'id' => $id,
-	            'cep' => $cep,
-	            'rua' => $rua,
-	            'numero' => $numero,
-	            'bairro' => $bairro,
-	            'cidade' => $cidade,
-	            'estado' => $estado
-			];
+			//IDENTIFICAR UM ID PRA EDIÇÃO
+			$id = $_POST['id'] ??'';
+
+	if ($id != '') {
+			//produra endereço pra editar
+			foreach($_SESSION['endereco'] as $chave => $endereco){
+
+				if ($endereco["id"] == $id) {
+
+					// atualiza os dados
+					$_SESSION['endereco'][$chave] = [
+						'id' => $endereco['id'],
+		                'cep' => $cep,
+		                'rua' => $rua,
+		                'numero' => $numero,
+		                'bairro' => $bairro,
+		                'cidade' => $cidade,
+		                'estado' => $estado
+		            ];
+
+			break;
 		}
+	}
 
-		//retornar para página enredeço
-		header("Location: ../paginas/endereco.php");
-		exit;
+} else {
+
+		// CRIA IDENTIFICADOR ENDEREÇO
+		$id = count($_SESSION['endereco']) + 1;
+
+		//Adicionar o endereço na lista
+		$_SESSION['endereco'][]=[
+			'id' => $id,
+	        'cep' => $cep,
+	        'rua' => $rua,
+	        'numero' => $numero,
+	        'bairro' => $bairro,
+	        'cidade' => $cidade,
+	        'estado' => $estado
+		];
+	}
+
+	//retornar para página enredeço
+	header("Location: ../paginas/endereco.php");
+	exit;
+
+}
 
 ?>
