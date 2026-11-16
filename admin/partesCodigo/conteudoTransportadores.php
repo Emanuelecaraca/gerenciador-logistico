@@ -1,3 +1,54 @@
+
+<?php
+
+    // Inicializa a variável que guardará o transportador selecionado.
+    $transportadorEdicao = null;
+
+    // Verifica se algum transportador foi selecionado para edição.
+    if (isset($_GET['editar'])) {
+
+        // Recebe o ID enviado pela URL.
+        $idEdicao = (int)$_GET['editar'];
+
+        // Percorre os transportadores cadastrados.
+        foreach ($_SESSION['transportadores'] as $transportador) {
+
+            // Compara o ID selecionado com o ID de cada registro.
+            if ($transportador['id'] == $idEdicao) {
+
+                // Guarda os dados do transportador encontrado.
+                $transportadorEdicao = $transportador;
+
+                break;
+            }
+        }
+    }
+
+        // Inicializa a variável que guardará o veículo selecionado.
+        $veiculoEdicao = null;
+
+        // Verifica se algum veículo foi selecionado.
+        if (isset($_GET['editarVeiculo'])) {
+
+            // Recebe o ID.
+            $idEdicao = (int)$_GET['editarVeiculo'];
+
+            foreach ($_SESSION['veiculos'] as $veiculo) {
+
+                // Verifica se encontrou o veículo selecionado.
+                if ($veiculo['id'] == $idEdicao) {
+
+                    // Guarda os dados.
+                    $veiculoEdicao = $veiculo;
+
+                    break;
+                }
+            }
+        }
+
+?>
+
+
 <main class="transportadores">
 
     <h2>Transportadores</h2>
@@ -9,12 +60,20 @@
     <div class="card mb-4">
 
         <div class="card-header">
-            <h5>Cadastrar Transportador</h5>
+            <h5>
+                <?php echo $transportadorEdicao ? 'Editar Transportador' : 'Cadastrar Transportador'; ?>
+            </h5>
         </div>
 
         <div class="card-body">
 
-            <form method="post" action="../php/transportadores.php">
+            <form method="post" action="<?php echo $transportadorEdicao ? 'transportadores.php' : '../php/transportadores.php'; ?>"
+
+
+                <?php if ($transportadorEdicao) { ?>
+                    <input type="hidden" name="acao" value="atualizar">
+                    <input type="hidden" name="id" value="<?php echo $transportadorEdicao['id']; ?>">
+                <?php } ?>
 
                 <div class="mb-3">
 
@@ -22,7 +81,7 @@
                         Razão Social / Nome
                     </label>
 
-                    <input type="text" name="nome" id="nome" class="form-control">
+                    <input type="text" name="nome" id="nome" class="form-control"  value="<?php echo htmlspecialchars($transportadorEdicao['nome'] ?? ''); ?>"required>
                     
                 </div>
 
@@ -32,7 +91,7 @@
                         CPF / CNPJ
                     </label>
 
-                    <input type="text" name="documento" id="documento" class="form-control">
+                    <input type="text" name="documento" id="documento" class="form-control" value="<?php echo htmlspecialchars($transportadorEdicao['documento'] ?? ''); ?>"required>
                     
                 </div>
 
@@ -42,7 +101,7 @@
                         Telefone
                     </label>
 
-                    <input type="text" name="telefone" id="telefone" class="form-control">
+                    <input type="text" name="telefone" id="telefone" class="form-control" value="<?php echo htmlspecialchars($transportadorEdicao['telefone'] ?? ''); ?>"required>
                     
                 </div>
 
@@ -52,13 +111,21 @@
                         E-mail
                     </label>
 
-                    <input type="email" name="email" id="email" class="form-control">
+                    <input type="email" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars($transportadorEdicao['email'] ?? ''); ?>"required>
                     
                 </div>
 
                 <button type="submit" class="btn btn-primary">
-                    Cadastrar Transportador
+                    <?php echo $transportadorEdicao ? 'Salvar Alterações' : 'Cadastrar Transportador'; ?>
                 </button>
+
+                <?php if ($transportadorEdicao) { ?>
+
+                    <a href="transportadores.php" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+
+                <?php } ?>
                 
             </form>
             
@@ -71,12 +138,23 @@
 <div class="card mb-4">
 
     <div class="card-header">
-        <h5>Cadastrar Veículo</h5>
+        <h5>
+            <?php echo $veiculoEdicao ? 'Editar Veículo' : 'Cadastrar Veículo'; ?>
+        </h5>
     </div>
 
     <div class="card-body">
 
-        <form method="post" action="../php/veiculos.php">
+        <form method="post"     action="<?php echo $veiculoEdicao ? 'transportadores.php' : '../php/veiculos.php'; ?>">
+            <?php if ($veiculoEdicao) { ?>
+
+                <!-- Identifica que o formulário está realizando uma edição. -->
+                <input type="hidden" name="acao" value="atualizarVeiculo">
+
+                <!-- Identifica qual veículo será atualizado. -->
+                <input type="hidden" name="id" value="<?php echo $veiculoEdicao['id']; ?>">
+
+            <?php } ?>
 
             <div class="mb-3">
 
@@ -100,7 +178,13 @@
                     ?>  <!-- FECHA PRA ESCREVER HTML -->
 
                                 <!-- Exibe cada transportador como uma opção. -->
-                                <option value="<?php echo $transportador['id']; ?>">
+                                <option value="<?php echo $transportador['id']; ?>"
+                                    <?php
+                                        if (($veiculoEdicao['transportador'] ?? '') == $transportador['id']) {
+                                            echo 'selected';
+                                        }
+                                    ?>
+                                >
                                     <?php echo htmlspecialchars($transportador['nome']); ?>
                                 </option>
 
@@ -129,7 +213,7 @@
                     Placa
                 </label>
                 
-                <input type="text" name="placa" id="placa" class="form-control" value="<?php echo htmlspecialchars($_GET['filtroPlaca'] ?? ''); ?>">
+                <input type="text" name="placa" id="placa" class="form-control" value="<?php echo htmlspecialchars($veiculoEdicao['placa'] ?? ''); ?>"required>
             </div>
 
             
@@ -139,22 +223,45 @@
                     Tipo de veículo
                 </label>
                 
-                <select name="tipo" id="tipo" class="form-select">
+                <select name="tipo" id="tipo" class="form-select" required>
 
-                        <option value="">Selecione o tipo</option>
-                        <option value="Caminhão">Caminhão</option>
-                        <option value="Carreta">Carreta</option>
-                        <option value="Van">Van</option>
-                        <option value="Utilitário">Utilitário</option>
-                        <option value="Outro">Outro</option>
+                    <option value="">Selecione o tipo</option>
+
+                    <option value="Caminhão" <?php echo (($veiculoEdicao['tipo'] ?? '') == 'Caminhão') ? 'selected' : ''; ?>>
+                        Caminhão
+                    </option>
+
+                    <option value="Carreta" <?php echo (($veiculoEdicao['tipo'] ?? '') == 'Carreta') ? 'selected' : ''; ?>>
+                        Carreta
+                    </option>
+
+                    <option value="Van" <?php echo (($veiculoEdicao['tipo'] ?? '') == 'Van') ? 'selected' : ''; ?>>
+                        Van
+                    </option>
+
+                    <option value="Utilitário" <?php echo (($veiculoEdicao['tipo'] ?? '') == 'Utilitário') ? 'selected' : ''; ?>>
+                        Utilitário
+                    </option>
+
+                    <option value="Outro" <?php echo (($veiculoEdicao['tipo'] ?? '') == 'Outro') ? 'selected' : ''; ?>>
+                        Outro
+                    </option>
 
                 </select>
 
             </div>
 
             <button type="submit" class="btn btn-primary">
-                Cadastrar Veículo
+                <?php echo $veiculoEdicao ? 'Salvar Alterações' : 'Cadastrar Veículo'; ?>
             </button>
+
+            <?php if ($veiculoEdicao) { ?>
+
+                <a href="transportadores.php" class="btn btn-secondary">
+                    Cancelar
+                </a>
+
+            <?php } ?>
 
         </form>
         
@@ -233,21 +340,19 @@
 
                             
                             <td><?php echo $transportador['id']; ?></td>
-
-                            
                             <td><?php echo htmlspecialchars($transportador['nome']); ?></td>
-
-                            
                             <td><?php echo htmlspecialchars($transportador['documento']); ?></td>
-
-                            
                             <td><?php echo htmlspecialchars($transportador['telefone']); ?></td>
-
-                            
                             <td><?php echo htmlspecialchars($transportador['email']); ?></td>
+                            <td>
+                                <a href="transportadores.php?editar=<?php echo $transportador['id']; ?>"class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
 
-                             
-                            <td>Ações</td>
+                                <a href="../php/excluirTransportador.php?id=<?php echo $transportador['id']; ?>"class="btn btn-danger btn-sm"onclick="return confirm('Tem certeza que deseja excluir este transportador?');">
+                                    Excluir
+                                </a>
+                            </td>
 
                         </tr>
 
@@ -293,73 +398,74 @@
 
     <div class="card-body">
         <!-- Formulário de pesquisa de veículos -->
-<form method="get" class="mb-3">
+        <form method="get" class="mb-3">
 
-    <!-- Campo de pesquisa pela placa -->
-    <div class="mb-3">
+            <!-- Campo de pesquisa pela placa -->
+            <div class="mb-3">
 
-        <label for="filtroPlaca" class="form-label">
-            Pesquisar pela placa
-        </label>
+                <label for="filtroPlaca" class="form-label">
+                    Pesquisar pela placa
+                </label>
 
-        <input type="text"name="filtroPlaca"id="filtroPlaca"class="form-control" placeholder="Digite a placa do veículo" value="<?php echo htmlspecialchars($_GET['filtroPlaca'] ?? ''); ?>" >
+                <input type="text"name="filtroPlaca"id="filtroPlaca"class="form-control" placeholder="Digite a placa do veículo" value="<?php echo htmlspecialchars($_GET['filtroPlaca'] ?? ''); ?>" >
 
-    </div>
+            </div>
 
-    <!-- Seleção de transportador -->
-    <div class="mb-3">
+            <!-- Seleção de transportador -->
+            <div class="mb-3">
 
-        <label for="filtroTransportador" class="form-label">
-            Transportador
-        </label>
+                <label for="filtroTransportador" class="form-label">
+                    Transportador
+                </label>
 
-        <select
-            name="filtroTransportador"
-            id="filtroTransportador"
-            class="form-select"
-        >
+                <select
+                    name="filtroTransportador"
+                    id="filtroTransportador"
+                    class="form-select"
+                >
 
-            <option value="">Todos os transportadores</option>
+                    <option value="">Todos os transportadores</option>
 
-            <?php
+                    <?php
 
-                // Percorre os transportadores cadastrados.
-                foreach ($_SESSION['transportadores'] as $transportador) {
+                        // Percorre os transportadores cadastrados.
+                        foreach ($_SESSION['transportadores'] as $transportador) {
 
-            ?>
+                    ?>
 
-               
-            <option
-                value="<?php echo $transportador['id']; ?>"
-                <?php
-                    if (($_GET['filtroTransportador'] ?? '') == $transportador['id']) {
-                        echo 'selected';
-                    }
-                ?>
-            >
-                <?php echo htmlspecialchars($transportador['nome']); ?>
-            </option>
+                       
+                    <option
+                        value="<?php echo $transportador['id']; ?>"
+                        <?php
+                            if (($_GET['filtroTransportador'] ?? '') == $transportador['id']) {
+                                echo 'selected';
+                            }
+                        ?>
+                    >
+                        <?php echo htmlspecialchars($transportador['nome']); ?>
+                    </option>
 
 
-            <?php
+                    <?php
 
-                }
+                        }
 
-            ?>
+                    ?>
 
-        </select>
+                </select>
 
-    </div>
+            </div>
 
-    <button type="submit" class="btn btn-secondary" >
-        Pesquisar
-    </button>
+            <button type="submit" class="btn btn-secondary" >
+                Pesquisar
+            </button>
 
-    <a href="transportadores.php" class="btn btn-outline-secondary">
-        Limpar pesquisa
-    </a>
+            <a href="transportadores.php" class="btn btn-outline-secondary">
+                Limpar pesquisa
+            </a>
 
-</form>
+        </form>
+
         <!-- Tabela de veículos cadastrados -->
         <div class="table-responsive">
 
@@ -372,6 +478,7 @@
                         <th>Transportador</th>
                         <th>Placa</th>
                         <th>Tipo</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
 
@@ -428,6 +535,15 @@
                             <td><?php echo htmlspecialchars($nomeTransportador); ?></td>
                             <td><?php echo htmlspecialchars($veiculo['placa']); ?></td>
                             <td><?php echo htmlspecialchars($veiculo['tipo']); ?></td>
+                            <td>
+                                <a href="transportadores.php?editarVeiculo=<?php echo $veiculo['id']; ?>"class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
+
+                                <a href="../php/excluirVeiculo.php?id=<?php echo $veiculo['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir este veículo?');">
+                                    Excluir
+                                </a>
+                            </td>
                         </tr>
 
                     <?php
