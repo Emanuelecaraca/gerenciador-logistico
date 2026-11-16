@@ -28,11 +28,7 @@
                         Data do relatório
                     </label>
 
-                    <input type="date"
-                           name="data"
-                           id="dataRelatorioHome"
-                           class="form-control"
-                           required>
+                    <input type="date"name="dataRelatorio"id="dataRelatorioHome"class="form-control"required>
                 </div>
 
                 <button type="submit" class="btn btn-primary">

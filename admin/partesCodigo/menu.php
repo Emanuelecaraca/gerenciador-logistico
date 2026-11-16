@@ -8,6 +8,6 @@
         <li><a href="endereco.php">Endereços</a></li>
         <li><a href="transportadores.php">Transportador</a></li>
         <li><a href="fretes.php">Fretes</a></li>
-        <li><a href="#">Relatórios</a></li>
+        <li><a href="relatorios.php">Relatórios</a></li>
     </ul>
 </nav>
