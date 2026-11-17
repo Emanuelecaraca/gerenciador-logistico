@@ -1,5 +1,7 @@
 <header>
-    <h1>Gerenciamento Logístico</h1>
+    <div class="titulo-sistema">
+        Gerenciamento Logístico
+    </div>
 
     <div class="header-usuario">
 

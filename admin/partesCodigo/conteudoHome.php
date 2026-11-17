@@ -15,11 +15,7 @@
 
         </div>
 
-        <div class="imagem-boas-vindas">
-
-                <img src="../img/caminhao2.png" alt="Caminhão rose gold">
-
-        </div>
+        
     </section>
 
     <?php
@@ -39,7 +35,7 @@
     <section class="indicadores">
 
         <div class="card-indicador">
-            <i class="bi bi-box-seam"></i>
+            <i class="bi-box-seam-fill"></i>
             <div>
                 <h2><?= $totalProdutos ?></h2>
                 <p>Produtos cadastrados</p>
@@ -63,7 +59,7 @@
         </div>
 
         <div class="card-indicador">
-            <i class="bi bi-file-earmark-text"></i>
+            <i class=" bi-file-earmark-text-fill"></i>
             <div>
                 <h2><?= $totalFretes ?></h2>
                 <p>Fretes cadastrados</p>
@@ -106,7 +102,14 @@
                 </thead>
 
                 <tbody>
-
+                    <?php
+                        // Liga cada status do frete a uma classe do CSS (cada uma tem uma cor)
+                        $classesStatus = [
+                            'Pendente'    => 'status-pendente',
+                            'Em trânsito' => 'status-transito',
+                            'Concluído'   => 'status-concluido'
+                        ];
+                    ?>
                     <?php foreach ($fretesRecentes as $frete): ?>
 
                         <?php
@@ -139,7 +142,10 @@
                                 break;
                             }
                         }
+                        
                         ?>
+
+
 
                         <tr>
                             <td><?= htmlspecialchars($cidadeOrigem) ?></td>

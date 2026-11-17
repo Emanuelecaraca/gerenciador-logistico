@@ -5,47 +5,56 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
 
 <nav>
 
-    <!-- Identificação do sistema no menu lateral -->
-    <h2 class="menu-brand">
-        Gerenciamento<br>
-        Logístico
-    </h2>
+    <button type="button" id="botaoMenu" class="botao-menu">
+        <i class="bi bi-list"></i>
+    </button>
 
     <ul>
         <li>
+            <!-- O PHP compara a página atual com 'home.php'. -->
             <a href="home.php" class="<?= $paginaAtual == 'home.php' ? 'active' : '' ?>">
-                Início
+                <i class="bi bi-house-door-fill"></i>
+                <span>Início</span>
             </a>
         </li>
 
         <li>
             <a href="produtos.php" class="<?= $paginaAtual == 'produtos.php' ? 'active' : '' ?>">
-                Produtos
+                <i class="bi bi-box-seam-fill"></i>
+                <span>Produtos</span>
             </a>
         </li>
 
         <li>
             <a href="endereco.php" class="<?= $paginaAtual == 'endereco.php' ? 'active' : '' ?>">
-                Endereços
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>Endereço</span>
             </a>
         </li>
 
         <li>
             <a href="transportadores.php" class="<?= $paginaAtual == 'transportadores.php' ? 'active' : '' ?>">
-                Transportador
+                <i class="bi bi-truck"></i>
+                <span>Transportadores</span>
             </a>
         </li>
 
         <li>
             <a href="fretes.php" class="<?= $paginaAtual == 'fretes.php' ? 'active' : '' ?>">
-                Fretes
+                <i class="bi bi-file-earmark-text-fill"></i>
+                <span>Fretes</span>
             </a>
         </li>
 
         <li>
             <a href="relatorios.php" class="<?= $paginaAtual == 'relatorios.php' ? 'active' : '' ?>">
-                Relatórios
+                <i class="bi bi-bar-chart-fill"></i>
+                <span>Relatórios</span>
             </a>
         </li>
+
+        
     </ul>
 </nav>
+
+<script src="../js/menuLateral.js"></script>
