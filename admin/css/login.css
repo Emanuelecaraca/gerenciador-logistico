@@ -1,0 +1,189 @@
+
+/*=======================================
+               LOGIN
+========================================*/
+/* CONFIGURAÇÕES GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* ESTRUTURA PRINCIPAL */
+.pagina-login {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+
+    background: #F3F6FA url("../img/fundoMapa.png") right center / auto 100% no-repeat;
+}
+
+/* LADO DA IMAGEM */
+.login-imagem {
+    width: 65%;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    clip-path: url(#curva-imagem);
+
+}
+
+.login-imagem img {
+    width: 128%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover; /*evita que a fotografia fique achatada*/
+    object-position: center;
+}
+
+
+
+.pagina-login::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 58%;
+    height: 100%;
+    background: url("../img/faixaCurva.png") 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+}
+
+/* LADO DO FORMULÁRIO */
+.login-formulario {
+    width: 36%;
+    right: 3.2%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* CONTEÚDO DO LOGIN */
+.conteudo-login {
+    width: 100%;
+    max-width: 520px;
+}
+
+/* TÍTULO */
+.conteudo-login h1 {
+    color: #0d2b55;
+    font-size: 50px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.05;
+    margin-bottom: 25px;
+}
+
+
+/* CARTÃO DE LOGIN */
+.cartao-login {
+    width: 100%;
+    background-color: #ffffff;
+    padding: 30px 28px;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(20, 43, 69, 0.08);
+    border: 1px solid #e8ecf5;
+}
+
+
+/* CAMPOS DO FORMULÁRIO */
+.cartao-login label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.campo-com-icone {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 25px;
+}
+
+.campo-com-icone input {
+    display: block;
+    width: 100%;
+    height: 45px;
+    padding: 0 42px;
+    margin: 0;
+    border: 1px solid #dce2ec;
+    border-radius: 9px;
+    background-color: #f8faff;
+    font-size: 15px;
+    color: #142B45;
+    outline: none;
+}
+
+/* ÍCONES DE USUÁRIO E CADEADO */
+.campo-com-icone > i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #142B45;
+    font-size: 17px;
+    pointer-events: none;
+}
+
+/* OLHINHO DA SENHA */
+.campo-com-icone button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    height: auto;
+    padding: 5px;
+    background: transparent;
+    color: #142B45;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2;
+}
+
+
+/* BOTÃO ENTRAR */
+.cartao-login button[type="submit"] {
+    width: 100%;
+    height: 45px;
+
+    background-color: #142B45;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 9px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cartao-login button[type="submit"]:hover {
+    background-color: #1e4168;
+}
+
+
+
+
+

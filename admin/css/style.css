@@ -586,7 +586,69 @@ main ul li a:hover {
     }
 }
 
+/* =================================
+    MENU DO USUÁRIO NO CABEÇALHO 
+=====================================*/
 
+.header-usuario {
+    position: relative;
+}
+
+.botao-usuario {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: none;
+    border: none;
+    color: #17243a;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+.botao-usuario:hover {
+    color: #f26a21;
+}
+
+.botao-usuario i {
+    font-size: 18px;
+}
+
+/* MENU SUSPENSO */
+
+.menu-usuario {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 170px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    padding: 6px;
+    z-index: 1000;
+}
+
+.menu-usuario a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    color: #17243a;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.menu-usuario a:hover {
+    background-color: #f4f6f9;
+}
+
+.menu-usuario .opcao-sair {
+    color: #dc3545;
+}
 /* =====================================
             RESPONSIVIDADE
 ===================================== */

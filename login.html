@@ -3,29 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+  <link rel="stylesheet" href="admin/css/login.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
+
+  
 <body>
 
-  <h1>Login</h1>
+<svg width="0" height="0" style="position:absolute">
+  <clipPath id="curva-imagem" clipPathUnits="objectBoundingBox">
+    <path d="M0,0 L1,0 C1,0.15 0.75,0.2 0.8,0.45 C0.85,0.7 0.95,0.85 0.9,1 L0,1 Z"/>
+  </clipPath>
+</svg>
 
-  
+    <main class="pagina-login">
 
-  <form method="post" action="admin/php/login.php">
+      <section class="login-imagem">
+          <img src="admin/img/caminhaoLogin.png" alt="caminhaoLogin">
+      </section>
 
-    <label for="email">E-mail</label><br>
-    <input type="email" id="email" name="email" required><br>
+        <section class="login-formulario">
 
-    <label for="senha">Senha</label><br>
-    <input type="password" id="senha" name="senha" required><br>
+            <div class="conteudo-login">
 
-    <div id="mensagem-erro" style="display: none; color: #dc3545; margin-bottom: 15px;">
-        Login não cadastrado ou senha incorreta.
-    </div>
-    <button type="submit">Entrar</button>
+                <h1>Gerenciador<br>Logístico</h1>
 
-  </form>
+                <div class="cartao-login">
 
-  
+                    <form method="post" action="admin/php/login.php">
+
+                        <label for="email">E-mail</label>
+
+                        <div class="campo-com-icone">
+                            <i class="bi bi-person-fill"></i>
+                            <input type="email" id="email" name="email" placeholder="Usuário" required>
+                        </div>
+
+                        <label for="senha">Senha</label>
+
+                        <div class="campo-com-icone">
+                            <i class="bi bi-lock"></i>
+                            <input type="password" id="senha" name="senha" placeholder="Senha" required>
+
+                            <button type="button" id="alternarSenha" aria-label="Mostrar senha">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+
+                        <button type="submit">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Entrar
+                        </button>
+
+                        <div id="mensagem-erro" style="display: none; color: #dc3545; margin-bottom: 15px;">
+                          Login não cadastrado ou senha incorreta.
+                      </div>
+
+                    </form>
+
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
 
     <script>
         const parametros = new URLSearchParams(window.location.search);
@@ -33,6 +75,24 @@
         if (parametros.get('erro') === '1') {
             document.getElementById('mensagem-erro').style.display = 'block';
         }
+
+        const campoSenha = document.getElementById('senha');
+        const alternarSenha = document.getElementById('alternarSenha');
+
+        alternarSenha.addEventListener('click', function () {
+
+            if (campoSenha.type === 'password') {
+                campoSenha.type = 'text';
+                alternarSenha.innerHTML = '<i class="bi bi-eye-slash"></i>';
+                alternarSenha.setAttribute('aria-label', 'Ocultar senha');
+            } else {
+                campoSenha.type = 'password';
+                alternarSenha.innerHTML = '<i class="bi bi-eye"></i>';
+                alternarSenha.setAttribute('aria-label', 'Mostrar senha');
+            }
+
+        });
     </script>
+
 </body>
 </html>
