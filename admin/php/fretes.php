@@ -1,9 +1,7 @@
 
 <?php
 
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
     // Inicializa
     if (!isset($_SESSION['fretes'])) {

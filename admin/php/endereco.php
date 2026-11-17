@@ -1,6 +1,6 @@
 <?php
 
-	session_start();
+	require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
 	// Verifica se a lista de endereços já existe. Se não existir, cria uma lista vazia.
 	if (!isset($_SESSION['endereco'])) {

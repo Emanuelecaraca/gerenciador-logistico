@@ -1,6 +1,9 @@
+<?php
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
+include("../partesCodigo/head.php");
+?>
 
-<?php include("../partesCodigo/head.php"); ?>
 
 <body>
 

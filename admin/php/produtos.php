@@ -1,7 +1,7 @@
 
 <?php
 
-session_start();     // Verifica se a lista de produtos já existe
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
     if (isset($_GET['editar'])) {
     //serve para verificar se o parâmetro editar foi enviado pela URL antes de executar

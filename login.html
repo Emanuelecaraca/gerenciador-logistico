@@ -8,6 +8,8 @@
 
   <h1>Login</h1>
 
+  
+
   <form method="post" action="admin/php/login.php">
 
     <label for="email">E-mail</label><br>
@@ -16,9 +18,21 @@
     <label for="senha">Senha</label><br>
     <input type="password" id="senha" name="senha" required><br>
 
+    <div id="mensagem-erro" style="display: none; color: #dc3545; margin-bottom: 15px;">
+        Login não cadastrado ou senha incorreta.
+    </div>
     <button type="submit">Entrar</button>
 
   </form>
 
+  
+
+    <script>
+        const parametros = new URLSearchParams(window.location.search);
+
+        if (parametros.get('erro') === '1') {
+            document.getElementById('mensagem-erro').style.display = 'block';
+        }
+    </script>
 </body>
 </html>

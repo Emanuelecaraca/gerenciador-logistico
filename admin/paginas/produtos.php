@@ -1,9 +1,9 @@
-<?php
 
-// Inicia a sessão.
-session_start();
-?>
-<?php include("../partesCodigo/head.php"); 
+<?php 
+
+    require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
+
+include("../partesCodigo/head.php"); 
 
 ?>
 

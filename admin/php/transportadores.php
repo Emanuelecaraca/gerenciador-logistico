@@ -1,7 +1,7 @@
 <?php
 	
-	session_start();
-
+    require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
+    
 	if (!isset($_SESSION['transportadores'])) {
         $_SESSION['transportadores'] = [];
     }
