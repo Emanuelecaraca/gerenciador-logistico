@@ -1,22 +1,27 @@
 
 <?php
 
-session_start();
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
-// Processa o cadastro de fretes antes de carregar a página.
-include("../php/fretes.php");
-
-include("../partesCodigo/head.php");
-
+include("../partesCodigo/head.php"); 
 ?>
 
 <body>
 
-    <?php include("../partesCodigo/header.php"); ?>
+    <div class="container-principal">
 
-    <?php include("../partesCodigo/menu.php"); ?>
+        <!-- Menu lateral -->
+        <?php include("../partesCodigo/menu.php"); ?>
 
-    <?php include("../partesCodigo/conteudoFrete.php"); ?>
+        <div class="area-conteudo">
+
+            <!-- Cabeçalho superior -->
+            <?php include("../partesCodigo/header.php"); ?>
+
+            <!-- Conteúdo de endereços. -->
+            <?php include("../partesCodigo/conteudoFrete.php");?>
+
+    </div>
 
 </body>
 </html>

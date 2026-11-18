@@ -12,18 +12,24 @@ include("../partesCodigo/head.php");
 
 <body>
 
-    <?php
+    <div class="container-principal">
 
-    // Cabeçalho.
-    include("../partesCodigo/header.php");
+        <!-- Menu lateral -->
+        <?php include("../partesCodigo/menu.php"); ?>
 
-    // Menu de navegação.
-    include("../partesCodigo/menu.php");
+        <!-- Área de conteúdo -->
+        <div class="area-conteudo">
 
-    // Conteúdo de produtos.
-    include("../partesCodigo/conteudoProdutos.php");
+            <!-- Cabeçalho superior -->
+            <?php include("../partesCodigo/header.php"); ?>
 
-    ?>
+            <!-- Conteúdo de produtos -->
+            <?php include("../partesCodigo/conteudoProdutos.php"); ?>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>

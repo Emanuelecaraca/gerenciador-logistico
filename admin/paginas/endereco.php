@@ -1,27 +1,30 @@
 <?php
 
-	session_start();
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
-	include("../partesCodigo/head.php");
+include("../partesCodigo/head.php");
 ?>
 
-
 <body>
-	
-	<?php   
 
-    // Cabeçalho do sistema.
-    include("../partesCodigo/header.php");
+    <div class="container-principal">
 
-    // Menu de navegação.
-    include("../partesCodigo/menu.php");
+        <!-- Menu lateral -->
+        <?php include("../partesCodigo/menu.php"); ?>
 
-    // Conteúdo de endereços.
-    include("../partesCodigo/conteudoEndereco.php");
+        <div class="area-conteudo">
 
-    ?>
+            <!-- Cabeçalho superior -->
+            <?php include("../partesCodigo/header.php"); ?>
+
+            <!-- Conteúdo de endereços -->
+            <?php include("../partesCodigo/conteudoEndereco.php"); ?>
+
+        </div>
+
+    </div>
 
     <script src="../js/cep.js"></script>
 
-
 </body>
+</html>

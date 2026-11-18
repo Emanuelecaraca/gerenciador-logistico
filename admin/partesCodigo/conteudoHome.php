@@ -173,16 +173,16 @@
 
             <ul>
                 <li>
-                    <a href="fretes.php">
-                        <i class="bi bi-truck atalho-icone"></i>
-                        <span class="atalho-texto">Cadastrar frete</span>
+                    <a href="relatorios.php">
+                        <i class="bi bi-clipboard-check atalho-icone"></i>
+                        <span class="atalho-texto">Gerar relatórios</span>
                         <span class="atalho-seta">→</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="fretes.php">
-                        <i class="bi bi-clipboard-check atalho-icone"></i>
+                        <i class="bi bi-truck atalho-icone"></i>
                         <span class="atalho-texto">Consultar fretes</span>
                         <span class="atalho-seta">→</span>
                     </a>
@@ -203,3 +203,5 @@
 
     
 </main>
+
+

@@ -8,20 +8,20 @@
 
 <body>
 	
-	<?php   
+	<div class="container-principal">
 
-    // Cabeçalho do sistema.
-    include("../partesCodigo/header.php");
+        <!-- Menu lateral -->
+        <?php include("../partesCodigo/menu.php"); ?>
 
-    // Menu de navegação.
-    include("../partesCodigo/menu.php");
+        <div class="area-conteudo">
 
-    // Conteúdo de endereços.
-    include("../partesCodigo/conteudoRelatorios.php");
+            <!-- Cabeçalho superior -->
+            <?php include("../partesCodigo/header.php"); ?>
 
-    ?>
+            <!-- Conteúdo de endereços. -->
+            <?php include("../partesCodigo/conteudoRelatorios.php");?>
 
-    <script src="../js/cep.js"></script>
+    </div>
 
 
 </body>

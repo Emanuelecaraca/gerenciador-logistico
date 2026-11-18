@@ -81,8 +81,9 @@
 } else {
 
 		// CRIA IDENTIFICADOR ENDEREÇO
-		$id = count($_SESSION['endereco']) + 1;
+		$ids = array_column($_SESSION['endereco'], 'id');
 
+		$id = empty($ids) ? 1 : max($ids) + 1;
 		//Adicionar o endereço na lista
 		$_SESSION['endereco'][]=[
 			'id' => $id,

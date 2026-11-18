@@ -32,6 +32,12 @@ body{
     min-height: 100vh;
 }
 
+.area-conteudo {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
 /* =====================================
           MENU LATERAL
 ===================================== */
