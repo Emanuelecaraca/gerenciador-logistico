@@ -2,7 +2,8 @@
 <?php
 
     // Inicia a sessão para acessar os transportadores cadastrados.
-    session_start();
+    require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
+    include("../partesCodigo/head.php");
 
     // Verifica se a solicitação de exclusão de um transportador.
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && ($_POST['acao'] ?? '') == 'excluir') {
@@ -92,8 +93,6 @@
         exit;
     }
 
-    // Inclui o cabeçalho da página.
-    include("../partesCodigo/head.php");
 
         // Verifica se o formulário de edição  foi enviado.
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && ($_POST['acao'] ?? '') == 'atualizarVeiculo') {
@@ -141,15 +140,28 @@
 
 ?>
 
-<body>
+<div class="container-principal">
 
+        <!-- Menu lateral -->
+        <?php include("../partesCodigo/menu.php"); ?>
 
-    <?php include("../partesCodigo/header.php"); ?>
+        <div class="area-conteudo">
 
-    <?php include("../partesCodigo/menu.php"); ?>
+            <!-- Cabeçalho superior -->
+            <?php include("../partesCodigo/header.php"); ?>
 
-    <?php include("../partesCodigo/conteudoTransportadores.php"); ?>
+            <!-- Conteúdo de endereços -->
+            <?php include("../partesCodigo/conteudoTransportadores.php"); ?>
 
+         </div>
+
+</div>
+
+<!-- JavaScript do Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript dos transportadores -->
+<script src="../js/transportadores.js"></script>
 
 </body>
 </html>

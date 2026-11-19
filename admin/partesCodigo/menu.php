@@ -17,7 +17,12 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
                 <span>Início</span>
             </a>
         </li>
-
+         <li>
+            <a href="transportadores.php" class="<?= $paginaAtual == 'transportadores.php' ? 'active' : '' ?>">
+                <i class="bi bi-truck"></i>
+                <span>Transportadores</span>
+            </a>
+        </li>
         <li>
             <a href="produtos.php" class="<?= $paginaAtual == 'produtos.php' ? 'active' : '' ?>">
                 <i class="bi bi-box-seam-fill"></i>
@@ -29,13 +34,6 @@ $paginaAtual = basename($_SERVER['PHP_SELF']);
             <a href="endereco.php" class="<?= $paginaAtual == 'endereco.php' ? 'active' : '' ?>">
                 <i class="bi bi-geo-alt-fill"></i>
                 <span>Endereço</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="transportadores.php" class="<?= $paginaAtual == 'transportadores.php' ? 'active' : '' ?>">
-                <i class="bi bi-truck"></i>
-                <span>Transportadores</span>
             </a>
         </li>
 

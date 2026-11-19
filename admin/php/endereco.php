@@ -7,6 +7,37 @@
 		$_SESSION['endereco'] = [];
 	}
 
+	// Verifica se foi solicitada a exclusão de um endereço.
+	if (isset($_GET['excluir'])) {
+
+	    $id = $_GET['excluir'];
+
+	    // Procura o endereço pelo ID.
+	    foreach ($_SESSION['endereco'] as $chave => $endereco) {
+
+	        if ($endereco['id'] == $id) {
+
+	            // Remove o endereço da lista.
+	            unset($_SESSION['endereco'][$chave]);
+
+	            // Limpa a edição caso o endereço excluído estivesse selecionado.
+				if (isset($_SESSION['endereco_edicao']) &&
+				    $_SESSION['endereco_edicao']['id'] == $id) {
+
+				    unset($_SESSION['endereco_edicao']);
+				}
+
+	            break;
+	        }
+	    }
+
+	    // Reorganiza os índices da lista.
+	    $_SESSION['endereco'] = array_values($_SESSION['endereco']);
+
+	    header("Location: ../paginas/endereco.php");
+	    exit;
+	}
+
 	//Verificar solicitação de edição de endereço
 	if (isset($_GET["id"])) {
 

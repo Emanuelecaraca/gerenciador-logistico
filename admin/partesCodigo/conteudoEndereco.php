@@ -4,23 +4,39 @@
 	
 ?>
 
-<!-- PRINCIPAL -->
 <div class="container mt-4">
 
-	<h2>Cadastro de Endereços</h2>
+	 <!-- TÍTULO + BOTÃO DE NOVO CADASTRO -->
+	<div class="d-flex justify-content-between align-items-center mb-3">
 
-	<!-- FORMULÁRIO -->
-	<div class="card mt-3">
+	    <h2 class="mb-0">Endereços</h2>
 
-		<!-- CABEÇALHO -->
-		<div class="card-header">
-			<h5>Cadastrar Endereço</h5>
-		</div>
+	    <button type="button" id="btn-novo-endereco" class="btn btn-primary">
+	        Novo cadastro
+	    </button>
 
+	</div>
 
-		<!-- CORPO FORMULARIO -->
-		<div class="card-body">
-			<form action="../php/endereco.php" method="post">
+	<!-- MODAL DO FORMULÁRIO -->
+	<div class="modal fade" id="modalEndereco" tabindex="-1"
+	     aria-labelledby="tituloModalEndereco" aria-hidden="true"
+	     data-editando="<?php echo $enderecoEdicao ? '1' : '0'; ?>">
+
+	    <div class="modal-dialog modal-lg">
+	        <div class="modal-content">
+
+	            <form action="../php/endereco.php" method="post">
+
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="tituloModalEndereco">
+	                        <?php echo $enderecoEdicao ? 'Editar Endereço' : 'Cadastrar Endereço'; ?>
+	                    </h5>
+
+	                    <button type="button" class="btn-close"
+	                            data-bs-dismiss="modal" aria-label="Fechar"></button>
+	                </div>
+
+                <div class="modal-body">
 
 				<input type="hidden" name="id" value="<?php echo $enderecoEdicao['id'] ?? ''; ?>">
 
@@ -30,56 +46,90 @@
 					<input type="text" name="cep" id="cep" class="form-control" placeholder="Digite o CEP" value="<?php echo $enderecoEdicao['cep'] ?? ''; ?>" required>
 				</div>
 
-				<!-- Rua -->
-				<div class="mb-3">
-					<label for="rua" class="form-label">Rua</label>
-					<input type="text" name="rua" id="rua" class="form-control" placeholder="Digite o nome da Rua" value="<?php echo htmlspecialchars($enderecoEdicao['rua'] ?? ''); ?>" required>
+				<div class="row">
+
+				    <div class="col-md-8 mb-3">
+				        <label for="rua" class="form-label">Rua</label>
+				        <input type="text" name="rua" id="rua" class="form-control"
+				               placeholder="Digite o nome da rua"
+				               value="<?php echo htmlspecialchars($enderecoEdicao['rua'] ?? ''); ?>"
+				               required>
+				    </div>
+
+				    <div class="col-md-4 mb-3">
+				        <label for="numero" class="form-label">Número</label>
+				        <input type="text" name="numero" id="numero" class="form-control"
+				               placeholder="Nº"
+				               value="<?php echo htmlspecialchars($enderecoEdicao['numero'] ?? ''); ?>"
+				               required>
+				    </div>
+
 				</div>
 
-				<!-- numero -->
-				<div class="mb-3">
-					<label for="numero" class="form-label">Número</label>
-					<input type="text" name="numero" id="numero" class="form-control" placeholder="Digite o Número" value="<?php echo htmlspecialchars($enderecoEdicao['numero'] ?? ''); ?>" required>
+				<div class="row">
+
+				    <div class="col-md-4 mb-3">
+				        <label for="bairro" class="form-label">Bairro</label>
+				        <input type="text" name="bairro" id="bairro" class="form-control"
+				               placeholder="Digite o bairro"
+				               value="<?php echo htmlspecialchars($enderecoEdicao['bairro'] ?? ''); ?>"
+				               required>
+				    </div>
+
+				    <div class="col-md-5 mb-3">
+				        <label for="cidade" class="form-label">Cidade</label>
+				        <input type="text" name="cidade" id="cidade" class="form-control"
+				               placeholder="Digite a cidade"
+				               value="<?php echo htmlspecialchars($enderecoEdicao['cidade'] ?? ''); ?>"
+				               required>
+				    </div>
+
+				    <div class="col-md-3 mb-3">
+				        <label for="estado" class="form-label">Estado</label>
+				        <input type="text" name="estado" id="estado" class="form-control"
+				               placeholder="PR" maxlength="2"
+				               value="<?php echo htmlspecialchars($enderecoEdicao['estado'] ?? ''); ?>"
+				               required>
+				    </div>
+
+				</div>
+			</div>
+
+				<div class="modal-footer">
+
+				    <button type="button" class="btn btn-secondary"
+				            data-bs-dismiss="modal">
+				        Cancelar
+				    </button>
+
+				    <button type="submit" class="btn btn-primary">
+				        <?php echo $enderecoEdicao ? 'Salvar Alterações' : 'Cadastrar Endereço'; ?>
+				    </button>
+
 				</div>
 
-				<!-- BAIRRO -->
-				<div class="mb-3">
-					<label for="bairro" class="form-label">Bairro</label>
-					<input type="text" name="bairro" id="bairro" class="form-control" placeholder="Digite o Bairro" value="<?php echo htmlspecialchars($enderecoEdicao['bairro'] ?? ''); ?>" required>
-				</div>
+				</form>
 
-				<!-- CIDADE -->
-				<div class="mb-3">
-					<label for="cidade" class="form-label">Cidade</label>
-					<input type="text" name="cidade" id="cidade" class="form-control" placeholder="Digite a Cidade" value="<?php echo htmlspecialchars($enderecoEdicao['cidade'] ?? ''); ?>" required>
-				</div>
+            </div>
+        </div>
+    </div>
 
-				<!-- ESTADO -->
-				<div class="mb-3">
-					<label for="estado" class="form-label">Estado</label>
-					<input type="text" name="estado" id="estado" class="form-control" placeholder="Ex: PR" maxlength="2" value="<?php echo htmlspecialchars($enderecoEdicao['estado'] ?? ''); ?>" required>
-				</div>
-
-				<button type="submit" class="btn btn-primary">
-					<?php echo $enderecoEdicao ? 'Atualizar Endereço' : 'Cadastrar Endereço'; ?>
-				</button>
-
-
-			</form>
-			
-		</div>
-	</div>
 
 
 	<!-- LISTAGEM DE ENDEREÇOS -->
-	<div class="card mt-4">
+	
+			<div class="input-group mb-2">
 
-	    <div class="card-header">
-	        <h5>Endereços Cadastrados</h5>
-	    </div>
+			    <input type="search" id="busca-endereco" class="form-control"
+			           placeholder="Pesquisar por CEP, rua, cidade ou ID...">
 
-	    <!-- CORPO -->
-	    <div class="card-body">
+			    <button type="button" id="btn-pesquisar-endereco" class="btn btn-primary">
+			        <i class="bi bi-search"></i> Pesquisar
+			    </button>
+
+			</div>
+
+			<small id="contador-endereco" class="text-muted d-block mb-3"></small>
 
 	    	<!-- CABEÇALHO TABELA -->
 	        <table class="table table-striped table-bordered">
@@ -105,7 +155,7 @@
 
 	                	<?php foreach ($_SESSION['endereco'] as $endereco): ?> <!-- passa pelos endereços armazenados -->
 
-	                        <tr>
+	                        <tr class="linha-endereco">
 	                        	<!-- exibe os dados armazenados dentro da tabela 
 	                        	htmlspecialchars evita que caracteres HTML apareça na tela-->
 	                            <td><?php echo $endereco['id']; ?></td>
@@ -116,17 +166,30 @@
 	                            <td><?php echo htmlspecialchars($endereco['cidade']); ?></td>
 	                            <td><?php echo htmlspecialchars($endereco['estado']); ?></td>
 	                            <td>
-								    <a href="../php/endereco.php?id=<?php echo $endereco['id']; ?>" class="btn btn-warning btn-sm">
-								        Editar
+								    <a href="../php/endereco.php?id=<?php echo $endereco['id']; ?>"
+								       class="btn btn-warning btn-sm">
+								        <i class="bi bi-pencil-square"></i> Editar
+								    </a>
+
+								    <a href="../php/endereco.php?excluir=<?php echo $endereco['id']; ?>"
+								       class="btn btn-danger btn-sm"
+								       onclick="return confirm('Deseja realmente excluir este endereço?');">
+								        <i class="bi bi-trash"></i> Excluir
 								    </a>
 								</td>
 							</tr>
 
 	                    <?php endforeach; ?><!-- ENCERRAR -->
 
+					<tr id="linha-sem-resultado-endereco" class="d-none">
+					    <td colspan="8" class="text-center">
+					        Nenhum endereço encontrado para essa pesquisa.
+					    </td>
+					</tr>
+
 	                <?php else: ?> <!-- se nao cadastrar nenhum endereço, segue abaixo a mensagem -->
 	                    <tr>
-	                        <td colspan="7" class="text-center">
+	                        <td colspan="8" class="text-center">
 	                            Nenhum endereço cadastrado.
 	                        </td>
 	                    </tr>
@@ -138,5 +201,7 @@
 	        </table>
 
 	    </div>
-	</div>
-</div>
+	
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/endereco.js"></script>

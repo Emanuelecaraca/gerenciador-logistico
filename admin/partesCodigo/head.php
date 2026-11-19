@@ -12,4 +12,10 @@
     <!-- CSS do projeto -->
     <link rel="stylesheet" href="/gerenciador-logistico/admin/css/style.css">
 
+    <!-- JavaScript do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript da pag fretes -->
+    <script src="/gerenciador-logistico/admin/js/fretes.js" defer></script>
 </head>
+

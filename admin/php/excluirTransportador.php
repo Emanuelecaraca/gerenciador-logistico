@@ -1,4 +1,3 @@
-
 <?php
 
     session_start();
@@ -6,28 +5,57 @@
     // Verifica se o ID do transportador foi recebido.
     if (isset($_GET['id'])) {
 
-        // Recebe o ID  que será excluído.
+        // Recebe o ID que será excluído.
         $id = (int)$_GET['id'];
 
-        // Percorre a lista de transportadores cadastrados.
-        foreach ($_SESSION['transportadores'] as $indice => $transportador) {
+        // Verifica se existem veículos vinculados ao transportador.
+        $possuiVeiculos = false;
 
-            // Verifica se encontrou o transportador selecionado.
-            if ($transportador['id'] == $id) {
+        if (!empty($_SESSION['veiculos'])) {
 
-                // Remove o transportador da lista.
-                unset($_SESSION['transportadores'][$indice]);
+            // Percorre os veículos cadastrados.
+            foreach ($_SESSION['veiculos'] as $veiculo) {
 
-                // Encerra a busca após encontrar o registro.
-                break;
+                // Verifica se o veículo pertence ao transportador.
+                if ($veiculo['transportador'] == $id) {
+                    $possuiVeiculos = true;
+                    break;
+                }
             }
         }
 
-        // Reorganiza os índices da lista após a exclusão.
-        $_SESSION['transportadores'] = array_values($_SESSION['transportadores']);
+        // Só permite excluir se não houver veículos vinculados.
+        if (!$possuiVeiculos) {
+
+            // Percorre os transportadores cadastrados.
+            foreach ($_SESSION['transportadores'] as $indice => $transportador) {
+
+                // Verifica se encontrou o transportador.
+                if ($transportador['id'] == $id) {
+
+                    // Remove o transportador.
+                    unset($_SESSION['transportadores'][$indice]);
+
+                    break;
+                }
+            }
+
+            // Reorganiza os índices da lista.
+            $_SESSION['transportadores'] = array_values($_SESSION['transportadores']);
+
+            // Retorna informando que a exclusão foi realizada.
+            header("Location: ../paginas/transportadores.php?excluido=1");
+            exit;
+
+        } else {
+
+            // Retorna informando que existem veículos vinculados.
+            header("Location: ../paginas/transportadores.php?erro=veiculos");
+            exit;
+        }
     }
 
-    // Retorna para a página de transportadores.
+    // Retorna à página de transportadores.
     header("Location: ../paginas/transportadores.php");
     exit;
 

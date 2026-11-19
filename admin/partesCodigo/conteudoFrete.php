@@ -23,6 +23,8 @@ foreach ($fretes as $frete) {
         (int)$frete['transportador'] === (int)$filtroTransportador
     );
 
+
+
     if ($correspondeData && $correspondeTransportador) {
         $fretesFiltrados[] = $frete;
     }
@@ -61,10 +63,200 @@ function enderecoCadastroFrete($lista, $id) {
 <main class="fretes">
 
     <h2>Fretes</h2>
-    <p>Cadastro e consulta de fretes</p>
+                
+        <button type="button" id="btn-novo-frete" class="btn btn-primary">
+            Novo frete
+        </button>
+        
+    <div class="modal fade" id="modalFrete" tabindex="-1"
+     aria-labelledby="tituloModalFrete" aria-hidden="true"
+     data-editando="0">
 
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="../php/fretes.php" method="post">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="tituloModalFrete">
+                            Cadastrar Frete
+                        </h5>
+
+                        <button type="button" class="btn-close"
+                                data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <input type="hidden" name="acao" value="cadastrar">
+
+                        <!-- Produtos -->
+                        <div class="mb-3">
+                            <label for="produtos" class="form-label">Produtos</label>
+
+                            <select name="produtos[]" id="produtos"
+                                    class="form-select" multiple required>
+
+                                <?php foreach ($produtos as $produto): ?>
+                                    <option value="<?php echo $produto['id']; ?>">
+                                        <?php echo htmlspecialchars($produto['nome']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+
+                            </select>
+
+                            <small class="text-muted">
+                                Para selecionar vários produtos, mantenha a tecla Ctrl pressionada.
+                            </small>
+                        </div>
+
+                        <!-- Transportador e veículo -->
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label for="transportador" class="form-label">Transportador</label>
+
+                                <select name="transportador" id="transportador"
+                                        class="form-select" required>
+
+                                    <option value="">Selecione o transportador</option>
+
+                                    <?php foreach ($transportadores as $transportador): ?>
+                                        <option value="<?php echo $transportador['id']; ?>">
+                                            <?php echo htmlspecialchars($transportador['nome']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="veiculo" class="form-label">Veículo</label>
+
+                                <select name="veiculo" id="veiculo"
+                                        class="form-select" required>
+
+                                    <option value="">Selecione o veículo</option>
+
+                                    <?php foreach ($veiculos as $veiculo): ?>
+                                        <option value="<?php echo $veiculo['id']; ?>">
+                                            <?php echo htmlspecialchars($veiculo['placa']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- Origem e destino -->
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+                                <label for="origem" class="form-label">Origem</label>
+
+                                <select name="origem" id="origem"
+                                        class="form-select" required>
+
+                                    <option value="">Selecione a origem</option>
+
+                                    <?php foreach ($enderecos as $endereco): ?>
+                                        <option value="<?php echo $endereco['id']; ?>">
+                                            <?php echo htmlspecialchars(
+                                                $endereco['rua'] . ', ' .
+                                                $endereco['numero'] . ' - ' .
+                                                $endereco['cidade']
+                                            ); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="destino" class="form-label">Destino</label>
+
+                                <select name="destino" id="destino"
+                                        class="form-select" required>
+
+                                    <option value="">Selecione o destino</option>
+
+                                    <?php foreach ($enderecos as $endereco): ?>
+                                        <option value="<?php echo $endereco['id']; ?>">
+                                            <?php echo htmlspecialchars(
+                                                $endereco['rua'] . ', ' .
+                                                $endereco['numero'] . ' - ' .
+                                                $endereco['cidade']
+                                            ); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <!-- Data, prazo e valor -->
+                        <div class="row">
+
+                            <div class="col-md-4 mb-3">
+                                <label for="dataFrete" class="form-label">Data do frete</label>
+
+                                <input type="date" name="dataFrete" id="dataFrete"
+                                       class="form-control" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="prazoChegada" class="form-label">Prazo de chegada</label>
+
+                                <input type="date" name="prazoChegada" id="prazoChegada"
+                                       class="form-control" required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="valor" class="form-label">Valor do frete (R$)</label>
+
+                                <input type="number" name="valor" id="valor"
+                                       class="form-control" min="0" step="0.01"
+                                       placeholder="0,00" required>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Cancelar
+                        </button>
+
+                        <button type="submit" class="btn btn-primary">
+                            Cadastrar Frete
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    
+<div class="input-group mb-2">
+
+    <input type="search" id="busca-frete" class="form-control"
+           placeholder="Pesquisar por ID ou produto">
+
+    <button type="button" id="btn-pesquisar-frete" class="btn btn-primary">
+        <i class="bi bi-search"></i> Pesquisar
+    </button>
+
+</div>
+
+<small id="contador-frete" class="text-muted d-block mb-3"></small>
     <div class="mb-3">
-        <a href="relatorios.php" class="btn btn-outline-primary">
+        <a href="fretes.php" class="btn btn-outline-primary">
             Acessar relatórios
         </a>
     </div>
@@ -77,271 +269,234 @@ function enderecoCadastroFrete($lista, $id) {
 
     <?php if (isset($_GET['erro'])): ?>
         <div class="alert alert-danger">
-            <?php if ($_GET['erro'] === 'relacionamento'): ?>
+
+            <?php if ($_GET['erro'] === 'veiculo_ocupado'): ?>
+
+                Este veículo já possui um frete em andamento. Finalize a rota atual antes de utilizá-lo novamente.
+
+            <?php elseif ($_GET['erro'] === 'relacionamento'): ?>
+
                 Confira os cadastros selecionados. O veículo deve pertencer ao transportador escolhido e a origem deve ser diferente do destino.
+
             <?php else: ?>
+
                 Preencha todos os campos corretamente.
+
             <?php endif; ?>
+
         </div>
     <?php endif; ?>
 
-    <!-- CADASTRO DE FRETE -->
-    <div class="card mb-4">
+    
+<!-- TABELA DE FRETES CADASTRADOS -->
+<div class="table-responsive mt-4">
 
-        <div class="card-header">
-            <h5>Cadastrar Frete</h5>
-        </div>
+    <table class="table table-bordered table-hover align-middle">
 
-        <div class="card-body">
+        <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Produtos</th>
+                <th>Transportador</th>
+                <th>Veículo</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Data do frete</th>
+                <th>Prazo de chegada</th>
+                <th>Valor</th>
+                <th>Status</th>
+            </tr>
+        </thead>
 
-            <form method="post" action="../php/fretes.php">
+        <tbody>
 
-                <input type="hidden" name="acao" value="cadastrar">
+            <?php if (!empty($fretesFiltrados)): ?>
 
-                <div class="mb-3">
-                    <label for="produto" class="form-label">Produto</label>
+                <?php foreach ($fretesFiltrados as $frete): ?>
 
-                    <select name="produto" id="produto" class="form-select" required>
-                        <option value="">Selecione o produto</option>
+                    <tr class="linha-frete">
 
-                        <?php foreach ($produtos as $produto): ?>
-                            <option value="<?= $produto['id'] ?>">
-                                <?= htmlspecialchars($produto['nome']) ?>
-                            </option>
-                        <?php endforeach; ?>
+                        <!-- ID -->
+                        <td>
+                            <?php echo htmlspecialchars((string)$frete['id']); ?>
+                        </td>
 
-                    </select>
+                        <!-- Produtos -->
+                        <td>
+                            <?php
+                            $produtosFrete = $frete['produtos'] ?? [];
+
+                            // Compatibilidade com eventual cadastro antigo.
+                            if (empty($produtosFrete) && isset($frete['produto'])) {
+                                $produtosFrete = [$frete['produto']];
+                            }
+
+                            $nomesProdutos = [];
+
+                            foreach ($produtosFrete as $idProduto) {
+                                $nomesProdutos[] = nomeCadastroFrete(
+                                    $produtos,
+                                    $idProduto
+                                );
+                            }
+
+                            echo htmlspecialchars(implode(', ', $nomesProdutos));
+                            ?>
+                        </td>
+
+                        <!-- Transportador -->
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                nomeCadastroFrete($transportadores, $frete['transportador'])
+                            );
+                            ?>
+                        </td>
+
+                        <!-- Veículo -->
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                nomeCadastroFrete($veiculos, $frete['veiculo'], 'placa')
+                            );
+                            ?>
+                        </td>
+
+                        <!-- Origem -->
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                enderecoCadastroFrete($enderecos, $frete['origem'])
+                            );
+                            ?>
+                        </td>
+
+                        <!-- Destino -->
+                        <td>
+                            <?php
+                            echo htmlspecialchars(
+                                enderecoCadastroFrete($enderecos, $frete['destino'])
+                            );
+                            ?>
+                        </td>
+
+                        <!-- Data do frete -->
+                        <td>
+                            <?php
+                            echo !empty($frete['dataFrete'])
+                                ? date('d/m/Y', strtotime($frete['dataFrete']))
+                                : 'Não informada';
+                            ?>
+                        </td>
+
+                        <!-- Prazo de chegada -->
+                        <td>
+                            <?php
+                            echo !empty($frete['prazoChegada'])
+                                ? date('d/m/Y', strtotime($frete['prazoChegada']))
+                                : 'Não informado';
+                            ?>
+                        </td>
+
+                        <!-- Valor -->
+                        <td>
+                            R$ <?php echo number_format((float)$frete['valor'], 2, ',', '.'); ?>
+                        </td>
+
+                        
+                        <!-- Status -->
+                        <td style="min-width: 220px;">
+
+                            <form action="../php/fretes.php" method="post">
+
+                                <input type="hidden" name="acao" value="atualizar_status">
+
+                                <input type="hidden" name="id"
+                                       value="<?php echo (int)$frete['id']; ?>">
+
+                                <?php
+
+                                // Recupera o status atual do frete.
+                                $statusAtual = $frete['status'] ?? 'Programado';
+
+                                // Converte nomes antigos para os novos.
+                                $statusAntigo = [
+                                    'No destino / Em descarga' => 'Em descarga',
+                                    'Rota concluída / Finalizado' => 'Finalizado',
+                                    'Rota concluída' => 'Finalizado'
+                                ];
+
+                                if (isset($statusAntigo[$statusAtual])) {
+                                    $statusAtual = $statusAntigo[$statusAtual];
+                                }
+
+                                // Define a classe de cor de cada status.
+                                $coresStatus = [
+                                    'Programado' => 'status-programado',
+                                    'Em carregamento' => 'status-carregamento',
+                                    'Aguardando saída' => 'status-saida',
+                                    'Em trânsito' => 'status-transito',
+                                    'Em parada' => 'status-parada',
+                                    'Em ocorrência' => 'status-ocorrencia',
+                                    'Em descarga' => 'status-descarga',
+                                    'Finalizado' => 'status-concluido'
+                                ];
+
+                                $classeStatus = $coresStatus[$statusAtual] ?? 'status-programado';
+
+                                ?>
+
+                                <select name="status"
+                                    class="form-select form-select-sm status-frete <?php echo $classeStatus; ?>"
+                                    onchange="this.form.submit()">
+
+                                    <?php foreach ($coresStatus as $opcao => $classe): ?>
+
+                                        <option value="<?php echo htmlspecialchars($opcao); ?>"
+                                            <?php echo ($statusAtual === $opcao) ? 'selected' : ''; ?>>
+
+                                            <?php echo htmlspecialchars($opcao); ?>
+
+                                        </option>
+
+                                    <?php endforeach; ?>
+
+                                </select>
+
+                            </form>
+
+                        </td>
+
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+            <?php endif; ?>
+
+            <!-- Mensagem de nenhum resultado -->
+            <tr id="linha-sem-resultado-frete"
+                <?php echo !empty($fretesFiltrados) ? 'class="d-none"' : ''; ?>>
+
+                <td colspan="9" class="text-center text-muted">
+                    Nenhum frete encontrado.
+                </td>
+
+            </tr>
+
+            <?php if (isset($_GET['status_atualizado'])): ?>
+
+                <div class="alert alert-success">
+                    Status do frete atualizado com sucesso!
                 </div>
 
-                <div class="mb-3">
-                    <label for="transportador" class="form-label">Transportador</label>
+            <?php endif; ?>
 
-                    <select name="transportador" id="transportador" class="form-select" required>
-                        <option value="">Selecione o transportador</option>
+        </tbody>
 
-                        <?php foreach ($transportadores as $transportador): ?>
-                            <option value="<?= $transportador['id'] ?>">
-                                <?= htmlspecialchars($transportador['nome']) ?>
-                            </option>
-                        <?php endforeach; ?>
+    </table>
 
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="veiculo" class="form-label">Veículo</label>
-
-                    <select name="veiculo" id="veiculo" class="form-select" required>
-                        <option value="">Selecione o veículo</option>
-
-                        <?php foreach ($veiculos as $veiculo): ?>
-                            <option value="<?= $veiculo['id'] ?>">
-                                <?= htmlspecialchars($veiculo['placa'] . ' - ' . $veiculo['tipo']) ?>
-                            </option>
-                        <?php endforeach; ?>
-
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="origem" class="form-label">Origem</label>
-
-                    <select name="origem" id="origem" class="form-select" required>
-                        <option value="">Selecione a origem</option>
-
-                        <?php foreach ($enderecos as $endereco): ?>
-                            <option value="<?= $endereco['id'] ?>">
-                                <?= htmlspecialchars(
-                                    ($endereco['rua'] ?? '') . ', ' .
-                                    ($endereco['numero'] ?? '') . ' - ' .
-                                    ($endereco['cidade'] ?? '')
-                                ) ?>
-                            </option>
-                        <?php endforeach; ?>
-
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="destino" class="form-label">Destino</label>
-
-                    <select name="destino" id="destino" class="form-select" required>
-                        <option value="">Selecione o destino</option>
-
-                        <?php foreach ($enderecos as $endereco): ?>
-                            <option value="<?= $endereco['id'] ?>">
-                                <?= htmlspecialchars(
-                                    ($endereco['rua'] ?? '') . ', ' .
-                                    ($endereco['numero'] ?? '') . ' - ' .
-                                    ($endereco['cidade'] ?? '')
-                                ) ?>
-                            </option>
-                        <?php endforeach; ?>
-
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="dataFrete" class="form-label">Data do Frete</label>
-                    <input type="date" name="dataFrete" id="dataFrete" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="valor" class="form-label">Valor do Frete (R$)</label>
-                    <input type="number" name="valor" id="valor" class="form-control"
-                           min="0" step="0.01" placeholder="Ex.: 1500,00" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    Cadastrar Frete
-                </button>
-
-            </form>
-
-        </div>
-    </div>
-
-    <!-- CONSULTA DE FRETES -->
-    <div class="card mb-4">
-
-        <div class="card-header">
-            <h5>Consultar Fretes</h5>
-        </div>
-
-        <div class="card-body">
-
-            <form method="get">
-
-                <div class="mb-3">
-                    <label for="filtroData" class="form-label">Data</label>
-                    <input type="date" name="filtroData" id="filtroData"
-                           class="form-control"
-                           value="<?= htmlspecialchars($filtroData) ?>">
-                </div>
-
-                <div class="mb-3">
-                    <label for="filtroTransportador" class="form-label">Transportador</label>
-
-                    <select name="filtroTransportador" id="filtroTransportador" class="form-select">
-                        <option value="">Todos os transportadores</option>
-
-                        <?php foreach ($transportadores as $transportador): ?>
-                            <option value="<?= $transportador['id'] ?>"
-                                <?= ((string)$transportador['id'] === (string)$filtroTransportador) ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($transportador['nome']) ?>
-                            </option>
-                        <?php endforeach; ?>
-
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-secondary">
-                    Pesquisar
-                </button>
-
-                <a href="fretes.php" class="btn btn-outline-secondary">
-                    Limpar filtros
-                </a>
-
-            </form>
-
-            <hr>
-            
-            
-            <div class="table-responsive">
-
-                <table class="table table-bordered table-striped">
-
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Produto</th>
-                            <th>Origem</th>
-                            <th>Destino</th>
-                            <th>Transportador</th>
-                            <th>Veículo</th>
-                            <th>Data</th>
-                            <th>Valor</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                                        </thead>
-
-                    <tbody>
-
-                        <?php if (count($fretesFiltrados) > 0): ?>
-
-                            <!-- Percorre os fretes encontrados na consulta. -->
-                            <?php foreach ($fretesFiltrados as $frete): ?>
-
-                                <tr>
-                                    <td><?= $frete['id'] ?></td>
-
-                                    <td>
-                                        <?= htmlspecialchars(nomeCadastroFrete($produtos, $frete['produto'])) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(enderecoCadastroFrete($enderecos, $frete['origem'])) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(enderecoCadastroFrete($enderecos, $frete['destino'])) ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(nomeCadastroFrete($transportadores, $frete['transportador'])) ?>
-                                    </td>
-
-                                    <td>
-                                        <?php
-                                        // Localiza a placa e o tipo do veículo pelo ID.
-                                        $veiculoTexto = 'Não encontrado';
-
-                                        foreach ($veiculos as $itemVeiculo) {
-                                            if ((int)$itemVeiculo['id'] === (int)$frete['veiculo']) {
-                                                $veiculoTexto = $itemVeiculo['placa'] . ' - ' . $itemVeiculo['tipo'];
-                                                break;
-                                            }
-                                        }
-                                        ?>
-
-                                        <?= htmlspecialchars($veiculoTexto) ?>
-                                    </td>
-
-                                    <td><?= date('d/m/Y', strtotime($frete['dataFrete'])) ?></td>
-
-                                    <td>
-                                        R$ <?= number_format($frete['valor'], 2, ',', '.') ?>
-                                    </td>
-
-                                    <td><?= htmlspecialchars($frete['status']) ?></td>
-                                </tr>
-
-                            <?php endforeach; ?>
-
-                        <?php else: ?>
-
-                            <!-- Informa quando não existem fretes para os filtros selecionados. -->
-                            <tr>
-                                <td colspan="9" class="text-center">
-                                    Nenhum frete encontrado.
-                                </td>
-                            </tr>
-
-                        <?php endif; ?>
-
-                    </tbody>
-
-                </table>  
-
-                
-
-            </div>
-
-        </div>
-    </div>
+</div>
 
     <a href="home.php">Voltar</a>
 

@@ -43,6 +43,13 @@ function filtrar() {
 // Pesquisa ao clicar no botão
 document.getElementById('btn-pesquisar').addEventListener('click', filtrar);
 
+// Atualiza a lista automaticamente ao apagar a pesquisa
+busca.addEventListener('input', function() {
+    if (busca.value === '') {
+        filtrar();
+    }
+});
+
 // Pesquisa ao apertar Enter
 busca.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
@@ -50,6 +57,8 @@ busca.addEventListener('keydown', function(event) {
         filtrar();
     }
 });
+
+
 /* ---------- Janela do formulário ---------- */
 function formularioNovo() {
   inputId.value = '';

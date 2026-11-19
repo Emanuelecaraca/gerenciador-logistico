@@ -838,3 +838,71 @@ main ul li a:hover {
    
 }
 
+
+/* Cores dos status dos fretes */
+
+.status-frete {
+    font-weight: 600;
+}
+
+/* Azul */
+.status-frete.status-programado {
+    background-color: #1976D2;
+    color: #FFFFFF;
+    border-color: #1976D2;
+}
+
+/* Amarelo */
+.status-frete.status-carregamento {
+    background-color: #FFD600;
+    color: #292300;
+    border-color: #FFD600;
+}
+
+/* Laranja */
+.status-frete.status-saida {
+    background-color: #F57C00;
+    color: #FFFFFF;
+    border-color: #F57C00;
+}
+
+/* Roxo */
+.status-frete.status-transito {
+    background-color: #7B1FA2;
+    color: #FFFFFF;
+    border-color: #7B1FA2;
+}
+
+/* Cinza */
+.status-frete.status-parada {
+    background-color: #616161;
+    color: #FFFFFF;
+    border-color: #616161;
+}
+
+/* Vermelho */
+.status-frete.status-ocorrencia {
+    background-color: #D32F2F;
+    color: #FFFFFF;
+    border-color: #D32F2F;
+}
+
+/* Turquesa */
+.status-frete.status-descarga {
+    background-color: #00A6A6;
+    color: #FFFFFF;
+    border-color: #00A6A6;
+}
+
+/* Verde */
+.status-frete.status-concluido {
+    background-color: #218838;
+    color: #FFFFFF;
+    border-color: #218838;
+}
+
+/* Opções do menu permanecem brancas */
+.status-frete option {
+    background-color: #FFFFFF;
+    color: #212529;
+}
