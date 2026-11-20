@@ -65,8 +65,11 @@
 	// Verifica se o formulário foi enviado pelo método POST.
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
+
+
 		// Se sim, recebe os dados enviados pelo formulário.
 		//trim() remove espaços desnecessários no início e no final.
+		$matricula = (int)($_POST['transportador'] ?? 0);
 		$cep = trim($_POST['cep'] ?? '');
 		$rua = trim($_POST['rua'] ?? '');
 		$numero = trim($_POST['numero'] ?? '');
@@ -96,14 +99,15 @@
 
 					// atualiza os dados
 					$_SESSION['endereco'][$chave] = [
-						'id' => $endereco['id'],
-		                'cep' => $cep,
-		                'rua' => $rua,
-		                'numero' => $numero,
-		                'bairro' => $bairro,
-		                'cidade' => $cidade,
-		                'estado' => $estado
-		            ];
+					    'id' => $endereco['id'],
+					    'transportador' => $matricula,
+					    'cep' => $cep,
+					    'rua' => $rua,
+					    'numero' => $numero,
+					    'bairro' => $bairro,
+					    'cidade' => $cidade,
+					    'estado' => $estado
+					];
 
 			break;
 		}
@@ -116,14 +120,15 @@
 
 		$id = empty($ids) ? 1 : max($ids) + 1;
 		//Adicionar o endereço na lista
-		$_SESSION['endereco'][]=[
-			'id' => $id,
-	        'cep' => $cep,
-	        'rua' => $rua,
-	        'numero' => $numero,
-	        'bairro' => $bairro,
-	        'cidade' => $cidade,
-	        'estado' => $estado
+		$_SESSION['endereco'][] = [
+		    'id' => $id,
+		    'transportador' => $matricula,
+		    'cep' => $cep,
+		    'rua' => $rua,
+		    'numero' => $numero,
+		    'bairro' => $bairro,
+		    'cidade' => $cidade,
+		    'estado' => $estado
 		];
 	}
 

@@ -5,6 +5,7 @@
 $_SESSION['transportadores'] = $_SESSION['transportadores'] ?? [];
 $_SESSION['veiculos'] = $_SESSION['veiculos'] ?? [];
 $_SESSION['endereco'] = $_SESSION['endereco'] ?? [];
+$_SESSION['fretes'] = $_SESSION['fretes'] ?? [];
 
 // ==================================================
 // TRANSPORTADOR SELECIONADO
@@ -76,23 +77,6 @@ if ($transportadorExibido !== null) {
 }
 
 
-// ==================================================
-// ENDEREÇOS DO TRANSPORTADOR SELECIONADO
-// ==================================================
-
-$enderecosParaExibir = [];
-
-if ($transportadorExibido !== null) {
-
-    foreach ($_SESSION['endereco'] as $endereco) {
-
-        if ((int)($endereco['transportador'] ?? 0) === (int)$transportadorExibido['id']) {
-
-            $enderecosParaExibir[] = $endereco;
-
-        }
-    }
-}
 // ENDEREÇOS DO TRANSPORTADOR SELECIONADO
 $enderecosParaExibir = [];
 
@@ -103,6 +87,22 @@ if ($transportadorExibido !== null) {
             (int)$transportadorExibido['id']
         ) {
             $enderecosParaExibir[] = $endereco;
+        }
+    }
+}
+
+// FRETES DO TRANSPORTADOR SELECIONADO
+$fretesParaExibir = [];
+
+if ($transportadorExibido !== null) {
+
+    foreach ($_SESSION['fretes'] as $frete) {
+
+        if (
+            (int)($frete['transportador'] ?? 0) ===
+            (int)$transportadorExibido['id']
+        ) {
+            $fretesParaExibir[] = $frete;
         }
     }
 }
@@ -938,41 +938,133 @@ if ($transportadorExibido !== null) {
         <!-- ==================================================
              ABA FRETES
         ================================================== -->
-
         <div class="tab-pane fade <?php echo (($_GET['aba'] ?? '') === 'fretes') ? 'show active' : ''; ?>"
-             id="conteudo-fretes" role="tabpanel">
+     id="conteudo-fretes" role="tabpanel">
 
-            <div class="card mb-4">
+        
+        <div class="card mb-4">
 
-                <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
+                <h5 class="mb-0">Fretes vinculados</h5>
+            </div>
 
-                    <h5 class="mb-0">Fretes cadastrados</h5>
+            <div class="card-body">
 
-                    <button type="button" class="btn btn-primary">
-                        <i class="bi bi-plus-lg"></i> Novo Frete
-                    </button>
+                <?php if (!$transportadorExibido) { ?>
 
-                </div>
+                    <p class="text-center text-muted mb-0">
+                        Selecione um transportador para visualizar seus fretes.
+                    </p>
 
-                <div class="card-body">
+                <?php } elseif (!empty($fretesParaExibir)) { ?>
 
-                    <?php if ($transportadorExibido) { ?>
+                    <div class="table-responsive">
 
-                        <p class="text-muted mb-0">
-                            Aqui serão exibidos os fretes deste transportador.
-                        </p>
+                        <table class="table table-bordered table-striped align-middle">
 
-                    <?php } else { ?>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Veículo</th>
+                                    <th>Origem</th>
+                                    <th>Destino</th>
+                                    <th>Data do frete</th>
+                                    <th>Prazo de chegada</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
 
-                        <p class="text-center text-muted mb-0">
-                            Selecione um transportador para continuar.
-                        </p>
+                            <tbody>
 
-                    <?php } ?>
+                                <?php foreach ($fretesParaExibir as $frete) { ?>
 
-                </div>
+                                    <?php
+
+                                    $placaVeiculo = 'Não encontrado';
+
+                                    foreach ($_SESSION['veiculos'] as $veiculo) {
+                                        if ((int)$veiculo['id'] === (int)$frete['veiculo']) {
+                                            $placaVeiculo = $veiculo['placa'];
+                                            break;
+                                        }
+                                    }
+
+                                    $origemFrete = 'Não encontrado';
+
+                                    foreach ($_SESSION['endereco'] as $endereco) {
+                                        if ((int)$endereco['id'] === (int)$frete['origem']) {
+                                            $origemFrete = ($endereco['rua'] ?? '') . ', ' .
+                                                ($endereco['numero'] ?? '') . ' - ' .
+                                                ($endereco['cidade'] ?? '');
+                                            break;
+                                        }
+                                    }
+
+                                    $destinoFrete = 'Não encontrado';
+
+                                    foreach ($_SESSION['endereco'] as $endereco) {
+                                        if ((int)$endereco['id'] === (int)$frete['destino']) {
+                                            $destinoFrete = ($endereco['rua'] ?? '') . ', ' .
+                                                ($endereco['numero'] ?? '') . ' - ' .
+                                                ($endereco['cidade'] ?? '');
+                                            break;
+                                        }
+                                    }
+
+                                    ?>
+
+                                    <tr>
+
+                                        <td><?php echo (int)$frete['id']; ?></td>
+
+                                        <td><?php echo htmlspecialchars($placaVeiculo); ?></td>
+
+                                        <td><?php echo htmlspecialchars($origemFrete); ?></td>
+
+                                        <td><?php echo htmlspecialchars($destinoFrete); ?></td>
+
+                                        <td>
+                                            <?php echo !empty($frete['dataFrete'])
+                                                ? date('d/m/Y', strtotime($frete['dataFrete']))
+                                                : 'Não informada'; ?>
+                                        </td>
+
+                                        <td>
+                                            <?php echo !empty($frete['prazoChegada'])
+                                                ? date('d/m/Y', strtotime($frete['prazoChegada']))
+                                                : 'Não informado'; ?>
+                                        </td>
+
+                                        <td>
+                                            R$ <?php echo number_format((float)$frete['valor'], 2, ',', '.'); ?>
+                                        </td>
+
+                                        <td>
+                                            <?php echo htmlspecialchars($frete['status'] ?? 'Programado'); ?>
+                                        </td>
+
+                                    </tr>
+
+                                <?php } ?>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                <?php } else { ?>
+
+                    <p class="text-center text-muted mb-0">
+                        Nenhum frete vinculado a este transportador.
+                    </p>
+
+                <?php } ?>
 
             </div>
+
+        </div>
 
         </div>
 

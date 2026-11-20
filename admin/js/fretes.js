@@ -1,91 +1,596 @@
+
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Localiza o modal.
+    // ==========================================
+    // MODAL DE CADASTRO E EDIÇÃO
+    // ==========================================
+
     const modalElemento = document.getElementById('modalFrete');
 
-    // Cria o modal do Bootstrap, caso ele exista na página.
     if (modalElemento) {
+
         const modalFrete = new bootstrap.Modal(modalElemento);
 
-        // Localiza o botão Novo frete.
         const btnNovo = document.getElementById('btn-novo-frete');
+        const formFrete = document.getElementById('formFrete');
 
-        // Abre o modal ao clicar no botão.
-        if (btnNovo) {
-            btnNovo.addEventListener('click', function () {
-                modalFrete.show();
-            });
+        const acaoFrete = document.getElementById('acaoFrete');
+        const idFrete = document.getElementById('idFrete');
+
+        const tituloModal = document.getElementById('tituloModalFrete');
+        const btnSalvar = document.getElementById('btnSalvarFrete');
+
+        // Produtos
+        const buscaProdutos = document.getElementById('busca-produtos-frete');
+        const listaProdutos = document.getElementById('lista-produtos-frete');
+        const produtosSelecionados = document.getElementById('produtos-selecionados-frete');
+        const checkboxesProdutos = document.querySelectorAll('.checkbox-produto-frete');
+
+        // Transportador
+        const campoBuscaTransportador = document.getElementById('busca-transportador');
+        const transportador = document.getElementById('transportador');
+        const listaTransportadores = document.getElementById('lista-transportadores');
+
+        // Veículo e demais campos
+        const veiculo = document.getElementById('veiculo');
+        const origem = document.getElementById('origem');
+        const destino = document.getElementById('destino');
+        const dataFrete = document.getElementById('dataFrete');
+        const prazoChegada = document.getElementById('prazoChegada');
+        const valor = document.getElementById('valor');
+
+        // Botões dos transportadores existentes no PHP
+        const itensTransportadores = listaTransportadores
+            ? listaTransportadores.querySelectorAll('.item-transportador')
+            : [];
+
+        // ==========================================
+        // PESQUISA DE TRANSPORTADORES
+        // ==========================================
+
+        function mostrarListaTransportadores() {
+
+            if (!listaTransportadores) {
+                return;
+            }
+
+            listaTransportadores.style.display = 'block';
+            listaTransportadores.style.position = 'absolute';
+            listaTransportadores.style.top = '100%';
+            listaTransportadores.style.left = '0';
+            listaTransportadores.style.width = '100%';
+            listaTransportadores.style.zIndex = '9999';
+
         }
 
-        // Abre o modal automaticamente durante a edição.
-        if (modalElemento.dataset.editando === '1') {
-            modalFrete.show();
-        }
-    }
+        function esconderListaTransportadores() {
 
+            if (listaTransportadores) {
+                listaTransportadores.style.display = 'none';
+            }
 
-        // Localiza os elementos da pesquisa.
-        const busca = document.getElementById('busca-frete');
-        const btnPesquisar = document.getElementById('btn-pesquisar-frete');
-        const contador = document.getElementById('contador-frete');
-        const linhas = document.querySelectorAll('.linha-frete');
-        const linhaSemResultado = document.getElementById('linha-sem-resultado-frete');
-
-        // Encerra a pesquisa caso os elementos ainda não existam.
-        if (!busca || !btnPesquisar || !contador) {
-            return;
         }
 
-        // Filtra os fretes conforme o texto digitado.
-        function filtrarFrete() {
 
-            const texto = busca.value.trim().toLowerCase();
+
+        function filtrarTransportadores() {
+
+            if (!campoBuscaTransportador || !listaTransportadores) {
+                return;
+            }
+
+            const pesquisa = campoBuscaTransportador.value.trim().toLowerCase();
+
             let encontrados = 0;
 
-            linhas.forEach(function (linha) {
+            itensTransportadores.forEach(function (botao) {
 
-                const conteudo = linha.textContent.toLowerCase();
+                const id = String(botao.dataset.id || '').toLowerCase();
+                const nome = String(botao.dataset.nome || '').toLowerCase();
 
-                if (conteudo.includes(texto)) {
-                    linha.classList.remove('d-none');
+                const corresponde =
+                    pesquisa !== '' &&
+                    (id.includes(pesquisa) || nome.includes(pesquisa));
+
+                botao.style.display = corresponde ? '' : 'none';
+
+                if (corresponde) {
                     encontrados++;
-                } else {
-                    linha.classList.add('d-none');
                 }
 
             });
 
-            // Atualiza o contador.
-            contador.textContent = encontrados + 
-                (encontrados === 1 ? ' frete encontrado.' : ' fretes encontrados.');
-
-            // Mostra ou esconde a mensagem de nenhum resultado.
-            if (linhaSemResultado) {
-                linhaSemResultado.classList.toggle('d-none', encontrados > 0);
+            if (pesquisa !== '' && encontrados > 0) {
+                mostrarListaTransportadores();
+            } else {
+                esconderListaTransportadores();
             }
+
         }
 
-        // Pesquisa ao clicar no botão.
-        btnPesquisar.addEventListener('click', filtrarFretes);
+        function selecionarTransportador(botao) {
 
-        // Atualiza a lista automaticamente ao apagar a pesquisa.
-        busca.addEventListener('input', function () {
-            if (busca.value === '') {
-                filtrarEnderecos();
-            }
-        });
-
-         // Pesquisa ao pressionar Enter.
-        busca.addEventListener('keydown', function (event) {
-
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                filtrarFretes();
+            if (!botao || !transportador || !campoBuscaTransportador) {
+                return;
             }
 
+            const id = String(botao.dataset.id);
+            const nome = String(botao.dataset.nome);
+
+            // O campo visível recebe ID - Nome.
+            campoBuscaTransportador.value = id + ' - ' + nome;
+
+            // O campo oculto envia somente o ID ao PHP.
+            transportador.value = id;
+
+            esconderListaTransportadores();
+
+            // Atualiza os veículos vinculados.
+            filtrarVeiculos();
+
+        }
+
+        if (campoBuscaTransportador && listaTransportadores) {
+
+            // Pesquisa por ID ou nome.
+            campoBuscaTransportador.addEventListener('input', function () {
+
+                // Limpa a seleção anterior enquanto digita.
+                transportador.value = '';
+
+                filtrarVeiculos();
+
+                filtrarTransportadores();
+
+            });
+
+            // Mostra os resultados ao clicar no campo.
+            campoBuscaTransportador.addEventListener('focus', function () {
+
+                if (!transportador.value) {
+                    filtrarTransportadores();
+                }
+
+            });
+
+            // Seleção dos transportadores.
+            itensTransportadores.forEach(function (botao) {
+
+                // Evita que o campo perca o foco antes do clique.
+                botao.addEventListener('mousedown', function (event) {
+                    event.preventDefault();
+                });
+
+                botao.addEventListener('click', function () {
+
+                    selecionarTransportador(botao);
+
+                });
+
+            });
+
+            // Enter seleciona o primeiro resultado disponível.
+            campoBuscaTransportador.addEventListener('keydown', function (event) {
+
+                if (event.key === 'Enter') {
+
+                    const resultados = Array.from(itensTransportadores).filter(
+                        function (botao) {
+                            return botao.style.display !== 'none';
+                        }
+                    );
+
+                    if (resultados.length > 0 && !transportador.value) {
+
+                        event.preventDefault();
+
+                        selecionarTransportador(resultados[0]);
+
+                    }
+
+                }
+
+                if (event.key === 'Escape') {
+                    esconderListaTransportadores();
+                }
+
+            });
+
+            // Fecha a lista ao clicar fora.
+            document.addEventListener('click', function (event) {
+
+                if (
+                    !campoBuscaTransportador.contains(event.target) &&
+                    !listaTransportadores.contains(event.target)
+                ) {
+                    esconderListaTransportadores();
+                }
+
+            });
+
+        }
+
+        // ==========================================
+        // FILTRAR VEÍCULOS PELO TRANSPORTADOR
+        // ==========================================
+
+        function filtrarVeiculos(idVeiculoSelecionado = '') {
+
+            if (!transportador || !veiculo) {
+                return;
+            }
+
+            const idTransportador = transportador.value;
+
+            Array.from(veiculo.options).forEach(function (option) {
+
+                if (option.value === '') {
+                    option.hidden = false;
+                    return;
+                }
+
+                const idVinculado = option.dataset.transportador;
+
+                const pertenceAoTransportador =
+                    idTransportador !== '' &&
+                    idVinculado === idTransportador;
+
+                option.hidden = !pertenceAoTransportador;
+
+            });
+
+            if (idVeiculoSelecionado) {
+
+                const opcao = Array.from(veiculo.options).find(function (option) {
+                    return option.value === String(idVeiculoSelecionado);
+                });
+
+                veiculo.value = (
+                    opcao && !opcao.hidden
+                ) ? String(idVeiculoSelecionado) : '';
+
+            } else {
+
+                veiculo.value = '';
+
+            }
+
+        }
+
+        // ==========================================
+        // ATUALIZAR PRODUTOS SELECIONADOS
+        // ==========================================
+
+        function atualizarProdutosSelecionados() {
+
+            if (!produtosSelecionados) {
+                return;
+            }
+
+            produtosSelecionados.innerHTML = '';
+
+            const selecionados = Array.from(checkboxesProdutos).filter(
+                function (checkbox) {
+                    return checkbox.checked;
+                }
+            );
+
+            if (selecionados.length === 0) {
+
+                produtosSelecionados.innerHTML =
+                    '<span class="text-muted">Nenhum produto selecionado.</span>';
+
+                return;
+
+            }
+
+            selecionados.forEach(function (checkbox) {
+
+                const label = document.querySelector(
+                    'label[for="' + checkbox.id + '"]'
+                );
+
+                const nomeProduto = label
+                    ? label.textContent.trim()
+                    : checkbox.value;
+
+                const etiqueta = document.createElement('span');
+
+                etiqueta.className = 'badge bg-primary p-2';
+                etiqueta.textContent = nomeProduto;
+
+                produtosSelecionados.appendChild(etiqueta);
+
+            });
+
+        }
+
+        // ==========================================
+        // PESQUISA DE PRODUTOS
+        // ==========================================
+
+        function filtrarProdutos() {
+
+            if (!buscaProdutos || !listaProdutos) {
+                return;
+            }
+
+            const texto = buscaProdutos.value.trim().toLowerCase();
+
+            const itens = listaProdutos.querySelectorAll('.item-produto-frete');
+
+            itens.forEach(function (item) {
+
+                const nome = item.textContent.toLowerCase();
+
+                if (nome.includes(texto)) {
+                    item.classList.remove('d-none');
+                } else {
+                    item.classList.add('d-none');
+                }
+
+            });
+
+        }
+
+        if (buscaProdutos) {
+            buscaProdutos.addEventListener('input', filtrarProdutos);
+        }
+
+        checkboxesProdutos.forEach(function (checkbox) {
+            checkbox.addEventListener('change', atualizarProdutosSelecionados);
         });
 
-        // Atualiza a pesquisa enquanto o usuário digita.
-        busca.addEventListener('input', filtrarFretes);
+        // ==========================================
+        // LIMPAR FORMULÁRIO
+        // ==========================================
+
+        function limparFormulario() {
+
+            if (formFrete) {
+                formFrete.reset();
+            }
+
+            acaoFrete.value = 'cadastrar';
+            idFrete.value = '';
+
+            tituloModal.textContent = 'Cadastrar Frete';
+            btnSalvar.textContent = 'Cadastrar Frete';
+
+            checkboxesProdutos.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+
+            if (buscaProdutos) {
+                buscaProdutos.value = '';
+            }
+
+            if (campoBuscaTransportador) {
+                campoBuscaTransportador.value = '';
+            }
+
+            if (transportador) {
+                transportador.value = '';
+            }
+
+            esconderListaTransportadores();
+
+            itensTransportadores.forEach(function (botao) {
+                botao.style.display = '';
+            });
+
+            filtrarProdutos();
+            filtrarVeiculos();
+            atualizarProdutosSelecionados();
+
+        }
+
+        // ==========================================
+        // NOVO FRETE
+        // ==========================================
+
+        if (btnNovo) {
+
+            btnNovo.addEventListener('click', function () {
+
+                limparFormulario();
+
+                modalFrete.show();
+
+            });
+
+        }
+
+        // ==========================================
+        // EDITAR FRETE
+        // ==========================================
+
+        document.querySelectorAll('.btn-editar-frete').forEach(function (botao) {
+
+            botao.addEventListener('click', function () {
+
+                limparFormulario();
+
+                acaoFrete.value = 'editar';
+                idFrete.value = botao.dataset.id;
+
+                tituloModal.textContent = 'Editar Frete';
+                btnSalvar.textContent = 'Salvar alterações';
+
+                // Produtos vinculados.
+                let produtosDoFrete = [];
+
+                try {
+
+                    produtosDoFrete = JSON.parse(
+                        botao.dataset.produtos || '[]'
+                    );
+
+                } catch (erro) {
+
+                    produtosDoFrete = [];
+
+                }
+
+                checkboxesProdutos.forEach(function (checkbox) {
+
+                    checkbox.checked = produtosDoFrete.includes(
+                        parseInt(checkbox.value, 10)
+                    );
+
+                });
+
+                atualizarProdutosSelecionados();
+
+                // Transportador.
+                const idTransportador = String(botao.dataset.transportador);
+
+                const botaoTransportador = Array.from(itensTransportadores).find(
+                    function (item) {
+                        return String(item.dataset.id) === idTransportador;
+                    }
+                );
+
+                if (botaoTransportador) {
+                    selecionarTransportador(botaoTransportador);
+                }
+
+                // Veículo.
+                filtrarVeiculos(botao.dataset.veiculo);
+
+                // Demais campos.
+                origem.value = botao.dataset.origem;
+                destino.value = botao.dataset.destino;
+                dataFrete.value = botao.dataset.data;
+                prazoChegada.value = botao.dataset.prazo;
+                valor.value = botao.dataset.valor;
+
+                modalFrete.show();
+
+            });
+
+        });
+
+        // ==========================================
+        // VALIDAR CADASTRO
+        // ==========================================
+
+        if (formFrete) {
+
+            formFrete.addEventListener('submit', function (event) {
+
+                const existeProdutoSelecionado = Array.from(checkboxesProdutos).some(
+                    function (checkbox) {
+                        return checkbox.checked;
+                    }
+                );
+
+                if (!transportador || !transportador.value) {
+
+                    event.preventDefault();
+
+                    alert('Selecione um transportador válido.');
+
+                    if (campoBuscaTransportador) {
+                        campoBuscaTransportador.focus();
+                    }
+
+                    return;
+
+                }
+
+                if (!existeProdutoSelecionado) {
+
+                    event.preventDefault();
+
+                    alert('Selecione pelo menos um produto para cadastrar o frete.');
+
+                    if (buscaProdutos) {
+                        buscaProdutos.focus();
+                    }
+
+                }
+
+            });
+
+        }
+
+        // Inicialização.
+        atualizarProdutosSelecionados();
+        filtrarVeiculos();
+
+    }
+
+    // ==========================================
+    // PESQUISA DE FRETES
+    // ==========================================
+
+    const busca = document.getElementById('busca-frete');
+    const btnPesquisar = document.getElementById('btn-pesquisar-frete');
+    const contador = document.getElementById('contador-frete');
+
+    const linhas = document.querySelectorAll('.linha-frete');
+    const linhaSemResultado = document.getElementById('linha-sem-resultado-frete');
+
+    if (!busca || !btnPesquisar || !contador) {
+        return;
+    }
+
+        function filtrarFrete() {
+
+        const texto = busca.value.trim().toLowerCase();
+
+        let encontrados = 0;
+
+        linhas.forEach(function (linha) {
+
+            const idFrete = linha.cells[0].textContent.trim().toLowerCase();
+            const transportador = linha.cells[1].textContent.trim().toLowerCase();
+
+            // Sem pesquisa, nenhum frete aparece.
+            const corresponde = texto !== '' && (
+                idFrete.includes(texto) ||
+                transportador.includes(texto)
+            );
+
+            if (corresponde) {
+                linha.classList.remove('d-none');
+                encontrados++;
+            } else {
+                linha.classList.add('d-none');
+            }
+
+        });
+
+        contador.textContent = texto === ''
+            ? 'Pesquise pelo ID do frete ou transportador.'
+            : encontrados + (encontrados === 1
+                ? ' frete encontrado.'
+                : ' fretes encontrados.');
+
+        if (linhaSemResultado) {
+            linhaSemResultado.classList.toggle(
+                'd-none',
+                texto === '' || encontrados > 0
+            );
+        }
+
+    }
+
+    btnPesquisar.addEventListener('click', filtrarFrete);
+
+    busca.addEventListener('input', filtrarFrete);
+
+    busca.addEventListener('keydown', function (event) {
+
+        if (event.key === 'Enter') {
+
+            event.preventDefault();
+
+        }
+
+    });
+
+    filtrarFrete();
 
 });

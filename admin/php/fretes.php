@@ -4,29 +4,29 @@
 require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
 // Inicializa a lista de fretes.
-if (!isset($_SESSION['fretes'])) {
-    $_SESSION['fretes'] = [];
-}
+$_SESSION['fretes'] = $_SESSION['fretes'] ?? [];
 
-// Verifica se o formulário foi enviado para atualizar o status.
+
+// ==================================================
+// ATUALIZAR STATUS
+// ==================================================
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'atualizar_status') {
 
     $idFrete = (int)($_POST['id'] ?? 0);
     $novoStatus = $_POST['status'] ?? '';
 
-    // Lista os status permitidos.
     $statusPermitidos = [
-    'Programado',
-    'Em carregamento',
-    'Aguardando saída',
-    'Em trânsito',
-    'Em parada',
-    'Em ocorrência',
-    'Em descarga',
-    'Finalizado'
-];
+        'Programado',
+        'Em carregamento',
+        'Aguardando saída',
+        'Em trânsito',
+        'Em parada',
+        'Em ocorrência',
+        'Em descarga',
+        'Finalizado'
+    ];
 
-    // Verifica se o status enviado é válido.
     if (in_array($novoStatus, $statusPermitidos, true)) {
 
         foreach ($_SESSION['fretes'] as &$frete) {
@@ -35,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'atualiz
                 $frete['status'] = $novoStatus;
                 break;
             }
-
         }
 
         unset($frete);
@@ -45,11 +44,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'atualiz
     exit;
 }
 
-// Verifica se o formulário foi enviado para cadastrar um frete.
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastrar') {
+
+// ==================================================
+// EXCLUIR FRETE
+// ==================================================
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'excluir') {
+
+    $idFrete = (int)($_POST['id'] ?? 0);
+
+    foreach ($_SESSION['fretes'] as $indice => $frete) {
+
+        if ((int)$frete['id'] === $idFrete) {
+            unset($_SESSION['fretes'][$indice]);
+            break;
+        }
+    }
+
+    $_SESSION['fretes'] = array_values($_SESSION['fretes']);
+
+    header("Location: ../paginas/fretes.php?excluido=1");
+    exit;
+}
+
+
+// ==================================================
+// CADASTRAR OU EDITAR FRETE
+// ==================================================
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    in_array($_POST['acao'] ?? '', ['cadastrar', 'editar'], true)
+) {
+
+    $acao = $_POST['acao'];
+    $idFrete = (int)($_POST['id'] ?? 0);
 
     // Recebe os produtos selecionados.
     $produtos = array_map('intval', $_POST['produtos'] ?? []);
+
     $produtos = array_values(array_unique(array_filter($produtos, function ($id) {
         return $id > 0;
     })));
@@ -58,11 +91,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastr
     $origem = (int)($_POST['origem'] ?? 0);
     $destino = (int)($_POST['destino'] ?? 0);
     $veiculo = (int)($_POST['veiculo'] ?? 0);
+
     $dataFrete = trim($_POST['dataFrete'] ?? '');
     $prazoChegada = trim($_POST['prazoChegada'] ?? '');
     $valor = str_replace(',', '.', trim($_POST['valor'] ?? ''));
 
-    // Verifica se os campos obrigatórios foram preenchidos.
+
+    // ==================================================
+    // VERIFICAR CAMPOS OBRIGATÓRIOS
+    // ==================================================
+
     if (
         count($produtos) > 0 &&
         $transportador > 0 &&
@@ -70,46 +108,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastr
         $destino > 0 &&
         $veiculo > 0 &&
         $dataFrete !== '' &&
+        $prazoChegada !== '' &&
         is_numeric($valor) &&
         (float)$valor >= 0
     ) {
 
-        // Verifica se o veículo pertence ao transportador escolhido.
-            $veiculoValido = false;
+        // Verifica se o frete existe, no caso de edição.
+        $indiceFrete = null;
 
-            foreach ($_SESSION['veiculos'] ?? [] as $itemVeiculo) {
+        if ($acao === 'editar') {
 
-                if (
-                    (int)$itemVeiculo['id'] === $veiculo &&
-                    (int)$itemVeiculo['transportador'] === $transportador
-                ) {
-                    $veiculoValido = true;
+            foreach ($_SESSION['fretes'] as $indice => $frete) {
+
+                if ((int)$frete['id'] === $idFrete) {
+                    $indiceFrete = $indice;
                     break;
                 }
             }
 
-            // Verifica se o veículo já possui um frete ativo.
-            $veiculoOcupado = false;
-
-            foreach ($_SESSION['fretes'] as $freteExistente) {
-
-                $statusExistente = $freteExistente['status'] ?? 'Programado';
-
-                if (
-                    (int)$freteExistente['veiculo'] === $veiculo &&
-                    !in_array($statusExistente, [
-                        'Finalizado',
-                        'Rota concluída',
-                        'Rota concluída / Finalizado'
-
-                    ], true)
-                ) {
-                    $veiculoOcupado = true;
-                    break;
-                }
+            if ($indiceFrete === null) {
+                header("Location: ../paginas/fretes.php?erro=frete_nao_encontrado");
+                exit;
             }
+        }
 
-        // Verifica se todos os produtos selecionados existem.
+
+        // ==================================================
+        // VERIFICAR SE O VEÍCULO PERTENCE AO TRANSPORTADOR
+        // ==================================================
+
+        $veiculoValido = false;
+
+        foreach ($_SESSION['veiculos'] ?? [] as $itemVeiculo) {
+
+            $idTransportadorVeiculo = (int)(
+                $itemVeiculo['transportador']
+                ?? $itemVeiculo['idTransportador']
+                ?? 0
+            );
+
+            if (
+                (int)($itemVeiculo['id'] ?? 0) === $veiculo &&
+                $idTransportadorVeiculo === $transportador
+            ) {
+                $veiculoValido = true;
+                break;
+            }
+        }
+
+
+        // ==================================================
+        // VERIFICAR SE O VEÍCULO ESTÁ OCUPADO
+        // ==================================================
+
+        $veiculoOcupado = false;
+
+        foreach ($_SESSION['fretes'] as $freteExistente) {
+
+            $statusExistente = $freteExistente['status'] ?? 'Programado';
+
+            // Na edição, ignora o próprio frete.
+            if (
+                (int)($freteExistente['veiculo'] ?? 0) === $veiculo &&
+                (int)($freteExistente['id'] ?? 0) !== $idFrete &&
+                !in_array($statusExistente, [
+                    'Finalizado',
+                    'Rota concluída',
+                    'Rota concluída / Finalizado'
+                ], true)
+            ) {
+                $veiculoOcupado = true;
+                break;
+            }
+        }
+
+
+        // ==================================================
+        // VERIFICAR SE OS PRODUTOS EXISTEM
+        // ==================================================
+
         $produtosCadastrados = [];
 
         foreach ($_SESSION['produtos'] ?? [] as $item) {
@@ -119,27 +196,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastr
         $produtosValidos = true;
 
         foreach ($produtos as $idProduto) {
+
             if (!in_array($idProduto, $produtosCadastrados, true)) {
                 $produtosValidos = false;
                 break;
             }
         }
 
-        // Verifica se o transportador existe.
+
+        // ==================================================
+        // VERIFICAR SE O TRANSPORTADOR EXISTE
+        // ==================================================
+
         $transportadorValido = false;
 
         foreach ($_SESSION['transportadores'] ?? [] as $item) {
+
             if ((int)$item['id'] === $transportador) {
                 $transportadorValido = true;
                 break;
             }
         }
 
-        // Verifica se os endereços existem.
+
+        // ==================================================
+        // VERIFICAR SE OS ENDEREÇOS EXISTEM
+        // ==================================================
+
         $origemValida = false;
         $destinoValido = false;
 
         foreach ($_SESSION['endereco'] ?? [] as $item) {
+
             if ((int)$item['id'] === $origem) {
                 $origemValida = true;
             }
@@ -149,7 +237,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastr
             }
         }
 
-        // Confere todos os relacionamentos.
+
+        // ==================================================
+        // CONFERIR TODOS OS RELACIONAMENTOS
+        // ==================================================
+
         if (
             $veiculoValido &&
             !$veiculoOcupado &&
@@ -160,40 +252,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['acao'] ?? '') === 'cadastr
             $origem !== $destino
         ) {
 
-            // Gera o próximo código sem repetir IDs após exclusões.
-            $maiorId = 0;
+            // ==============================================
+            // CADASTRAR NOVO FRETE
+            // ==============================================
 
-            foreach ($_SESSION['fretes'] as $frete) {
-                $maiorId = max($maiorId, (int)$frete['id']);
+            if ($acao === 'cadastrar') {
+
+                // Gera o próximo ID.
+                $maiorId = 0;
+
+                foreach ($_SESSION['fretes'] as $frete) {
+                    $maiorId = max($maiorId, (int)$frete['id']);
+                }
+
+                $_SESSION['fretes'][] = [
+                    'id' => $maiorId + 1,
+                    'produtos' => $produtos,
+                    'transportador' => $transportador,
+                    'origem' => $origem,
+                    'destino' => $destino,
+                    'veiculo' => $veiculo,
+                    'dataFrete' => $dataFrete,
+                    'prazoChegada' => $prazoChegada,
+                    'valor' => (float)$valor,
+                    'status' => 'Programado'
+                ];
+
+                header("Location: ../paginas/fretes.php?sucesso=1");
+                exit;
+
+            } else {
+
+                // ==========================================
+                // EDITAR FRETE EXISTENTE
+                // ==========================================
+
+                $_SESSION['fretes'][$indiceFrete]['produtos'] = $produtos;
+                $_SESSION['fretes'][$indiceFrete]['transportador'] = $transportador;
+                $_SESSION['fretes'][$indiceFrete]['origem'] = $origem;
+                $_SESSION['fretes'][$indiceFrete]['destino'] = $destino;
+                $_SESSION['fretes'][$indiceFrete]['veiculo'] = $veiculo;
+                $_SESSION['fretes'][$indiceFrete]['dataFrete'] = $dataFrete;
+                $_SESSION['fretes'][$indiceFrete]['prazoChegada'] = $prazoChegada;
+                $_SESSION['fretes'][$indiceFrete]['valor'] = (float)$valor;
+
+                header("Location: ../paginas/fretes.php?editado=1");
+                exit;
             }
 
-            // Salva o novo frete.
-            $_SESSION['fretes'][] = [
-                'id' => $maiorId + 1,
-                'produtos' => $produtos,
-                'transportador' => $transportador,
-                'origem' => $origem,
-                'destino' => $destino,
-                'veiculo' => $veiculo,
-                'dataFrete' => $dataFrete,
-                'valor' => (float)$valor,
-                'status' => 'Programado'
-            ];
-
-            header("Location: ../paginas/fretes.php?sucesso=1");
-            exit;
-
-            } else if ($veiculoOcupado) {
+        } elseif ($veiculoOcupado) {
 
             header("Location: ../paginas/fretes.php?erro=veiculo_ocupado");
             exit;
 
         } else {
+
             header("Location: ../paginas/fretes.php?erro=relacionamento");
             exit;
         }
 
     } else {
+
         header("Location: ../paginas/fretes.php?erro=campos");
         exit;
     }
