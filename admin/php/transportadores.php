@@ -7,6 +7,69 @@ if (!isset($_SESSION['transportadores'])) {
     $_SESSION['transportadores'] = [];
 }
 
+// ==========================================
+// ANEXAR DOCUMENTO AO TRANSPORTADOR
+// ==========================================
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    ($_POST['acao'] ?? '') === 'anexar_documento'
+) {
+
+    $idTransportador = (int)($_POST['idTransportador'] ?? 0);
+
+    foreach ($_SESSION['transportadores'] as $indice => $transportador) {
+
+        if ((int)$transportador['id'] === $idTransportador) {
+
+            if (!isset($_SESSION['transportadores'][$indice]['documentos'])) {
+                $_SESSION['transportadores'][$indice]['documentos'] = [];
+            }
+
+            if (
+                isset($_FILES['documento']) &&
+                $_FILES['documento']['error'] === UPLOAD_ERR_OK
+            ) {
+
+                $arquivo = $_FILES['documento'];
+                $extensao = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));
+
+                $permitidos = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'csv'];
+
+                if (!in_array($extensao, $permitidos)) {
+                    http_response_code(400);
+                    echo json_encode(['erro' => 'Formato de arquivo não permitido.']);
+                    exit;
+                }
+
+                $pasta = __DIR__ . '/../documentos/';
+
+                $nomeArquivo = uniqid('documento_', true) . '.' . $extensao;
+
+                if (move_uploaded_file($arquivo['tmp_name'], $pasta . $nomeArquivo)) {
+
+                    $_SESSION['transportadores'][$indice]['documentos'][] = [
+                        'id' => uniqid(),
+                        'nome' => $arquivo['name'],
+                        'arquivo' => $nomeArquivo
+                    ];
+
+                    echo json_encode(['sucesso' => true]);
+                    exit;
+                }
+            }
+
+            http_response_code(400);
+            echo json_encode(['erro' => 'Não foi possível anexar o documento.']);
+            exit;
+        }
+    }
+
+    http_response_code(404);
+    echo json_encode(['erro' => 'Transportador não encontrado.']);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $nome = trim($_POST['nome'] ?? '');

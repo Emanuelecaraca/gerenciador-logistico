@@ -387,7 +387,6 @@ function enderecoCadastroFrete($lista, $id) {
 
     </div>
 
-    <small id="contador-frete" class="text-muted d-block mb-3"></small>
 
     
 
@@ -614,6 +613,15 @@ function enderecoCadastroFrete($lista, $id) {
 
                             <!-- AÇÕES -->
                             <td class="text-center text-nowrap">
+
+                                <a href="../relatorioFrete.php?id=<?php echo (int)$frete['id']; ?>"
+                                   target="_blank"
+                                   class="btn btn-sm btn-outline-success"
+                                   title="Gerar relatório">
+
+                                    <i class="bi bi-file-earmark-text"></i>
+
+                                </a>
 
                                 <button type="button"
                                         class="btn btn-sm btn-outline-primary"

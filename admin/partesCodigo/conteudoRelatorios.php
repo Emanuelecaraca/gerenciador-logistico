@@ -102,8 +102,6 @@ function produtosFreteRelatorio($frete, $listaProdutos)
 <main class="container mt-4">
 
     <h2>Relatórios</h2>
-    <p>Consulte e baixe relatórios dos fretes cadastrados.</p>
-
     <div class="card mb-4">
         <div class="card-header">
             <h5 class="mb-0">Gerar relatório de fretes</h5>

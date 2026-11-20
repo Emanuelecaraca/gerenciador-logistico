@@ -156,9 +156,7 @@ if ($transportadorExibido !== null) {
 
         <div class="d-flex gap-2">
 
-            <button type="button" id="btn-novo-veiculo" class="btn btn-outline-primary">
-                <i class="bi bi-plus-lg"></i> Cadastrar Veículo
-            </button>
+            
 
             <button type="button" id="btn-novo-transportador" class="btn btn-primary">
                 <i class="bi bi-plus-lg"></i> Novo Transportador
@@ -789,8 +787,14 @@ if ($transportadorExibido !== null) {
 
             <div class="card mb-4">
 
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
+
                     <h5 class="mb-0">Veículos vinculados</h5>
+
+                    <button type="button" id="btn-novo-veiculo" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-plus-lg"></i> Cadastrar Veículo
+                    </button>
+
                 </div>
 
                 <div class="card-body">
@@ -835,7 +839,7 @@ if ($transportadorExibido !== null) {
                                                 <a href="transportadores.php?matricula=<?php echo $transportadorExibido['id']; ?>&aba=veiculos&editarVeiculo=<?php echo $veiculo['id']; ?>"
                                                    class="btn btn-warning btn-sm">
 
-                                                    <i class="bi bi-pencil-square"></i> Editar
+                                                    <i class="bi bi-pencil-square"></i>
 
                                                 </a>
 
@@ -1082,29 +1086,67 @@ if ($transportadorExibido !== null) {
 
                     <h5 class="mb-0">Documentos cadastrados</h5>
 
-                    <button type="button" class="btn btn-primary">
+                    <input type="file" id="input-documento" hidden
+                           accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.csv">
+
+                    <button type="button" id="btn-novo-documento" class="btn btn-primary">
                         <i class="bi bi-plus-lg"></i> Novo Documento
                     </button>
 
                 </div>
 
+                
                 <div class="card-body">
 
-                    <?php if ($transportadorExibido) { ?>
+                    <?php
+                    $documentos = $transportadorExibido['documentos'] ?? [];
+                    ?>
 
-                        <p class="text-muted mb-0">
-                            Aqui serão exibidos os documentos relacionados ao transportador.
-                        </p>
-
-                    <?php } else { ?>
+                    <?php if (!$transportadorExibido) { ?>
 
                         <p class="text-center text-muted mb-0">
                             Selecione um transportador para continuar.
                         </p>
 
+                    <?php } elseif (empty($documentos)) { ?>
+
+                        <p class="text-muted mb-0">
+                            Nenhum documento anexado a este transportador.
+                        </p>
+
+                    <?php } else { ?>
+
+                        <div class="list-group">
+
+                            <?php foreach ($documentos as $documento) { ?>
+
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+
+                                    <div>
+                                        <i class="bi bi-file-earmark-text me-2"></i>
+
+                                        <?php echo htmlspecialchars($documento['nome']); ?>
+                                    </div>
+
+                                    <a href="../documentos/<?php echo rawurlencode($documento['arquivo']); ?>"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary"
+                                       title="Abrir documento">
+
+                                        <i class="bi bi-download"></i>
+
+                                    </a>
+
+                                </div>
+
+                            <?php } ?>
+
+                        </div>
+
                     <?php } ?>
 
                 </div>
+
 
             </div>
 

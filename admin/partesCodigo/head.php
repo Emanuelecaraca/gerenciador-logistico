@@ -17,5 +17,9 @@
 
     <!-- JavaScript da pag fretes -->
     <script src="/gerenciador-logistico/admin/js/fretes.js" defer></script>
+
+    <?php if (basename($_SERVER['PHP_SELF']) === 'relatorioFrete.php'): ?>
+        <link rel="stylesheet" href="/gerenciador-logistico/admin/css/relatorio.css">
+    <?php endif; ?>
 </head>
 

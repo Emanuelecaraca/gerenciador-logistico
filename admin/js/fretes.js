@@ -594,3 +594,108 @@ document.addEventListener('DOMContentLoaded', function () {
     filtrarFrete();
 
 });
+
+
+// ==========================================
+// ANEXAR DOCUMENTO DO TRANSPORTADOR
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const botaoDocumento = document.getElementById('btn-novo-documento');
+    const inputDocumento = document.getElementById('input-documento');
+
+    if (!inputDocumento) return;
+
+    function enviarDocumento(arquivo) {
+
+        const extensao = arquivo.name.split('.').pop().toLowerCase();
+
+        const permitidos = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png', 'csv'];
+
+        if (!permitidos.includes(extensao)) {
+            alert('Formato de arquivo não permitido.');
+            return;
+        }
+
+        const nomeOriginal = arquivo.name.substring(
+            0,
+            arquivo.name.lastIndexOf('.')
+        );
+
+        const novoNome = prompt(
+            'Informe o nome do documento:',
+            nomeOriginal
+        );
+
+        if (novoNome === null || novoNome.trim() === '') return;
+
+        const arquivoRenomeado = new File(
+            [arquivo],
+            novoNome.trim() + '.' + extensao,
+            { type: arquivo.type }
+        );
+
+        const dados = new FormData();
+
+        dados.append('acao', 'anexar_documento');
+        dados.append('idTransportador', new URLSearchParams(window.location.search).get('matricula'));
+        dados.append('documento', arquivoRenomeado);
+
+        fetch('../php/transportadores.php', {
+            method: 'POST',
+            body: dados
+        })
+        .then(async resposta => {
+            const texto = await resposta.text();
+            console.log('Resposta do PHP:', texto);
+
+            return JSON.parse(texto);
+        })
+        .then(resultado => {
+
+            if (resultado.sucesso) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('aba', 'documentos');
+                window.location.href = url.toString();
+            } else {
+                alert(resultado.erro || 'Erro ao anexar documento.');
+            }
+
+        })
+        .catch(() => {
+            alert('Não foi possível enviar o documento.');
+        });
+    }
+
+    if (botaoDocumento) {
+        botaoDocumento.addEventListener('click', function () {
+            inputDocumento.click();
+        });
+    }
+
+    inputDocumento.addEventListener('change', function () {
+
+        if (this.files.length > 0) {
+            enviarDocumento(this.files[0]);
+            this.value = '';
+        }
+
+    });
+
+    window.addEventListener('dragover', function (event) {
+        event.preventDefault();
+    }, true);
+
+    window.addEventListener('drop', function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.dataTransfer.files.length > 0) {
+            enviarDocumento(event.dataTransfer.files[0]);
+        }
+
+    }, true);
+
+});

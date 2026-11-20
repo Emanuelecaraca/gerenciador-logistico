@@ -1,0 +1,299 @@
+
+/* ==========================================
+   PÁGINA DE RELATÓRIOS
+========================================== */
+
+.pagina-relatorios {
+    padding-bottom: 35px;
+}
+
+.relatorios-titulo {
+    margin-bottom: 25px;
+}
+
+.relatorios-titulo h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.relatorios-titulo p {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+.relatorios-filtros {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: visible;
+}
+
+.relatorios-filtros .card-header {
+    background: #f8f9fa;
+    padding: 15px 20px;
+}
+
+.relatorios-filtros .card-body {
+    padding: 22px;
+}
+
+.relatorios-filtros label {
+    font-weight: 500;
+}
+
+.relatorios-filtros .form-control {
+    min-height: 42px;
+}
+
+.relatorios-acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.relatorios-acoes .btn {
+    min-height: 40px;
+}
+
+
+
+/* ==========================================
+   CAMPOS DE PESQUISA
+========================================== */
+
+.campo-pesquisa-relatorio {
+    position: relative;
+}
+
+.lista-pesquisa-relatorio {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 12px;
+    right: 12px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.lista-pesquisa-relatorio .list-group-item {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px 12px;
+}
+
+.lista-pesquisa-relatorio .list-group-item:hover {
+    background: #f1f3f5;
+}
+
+
+/* ==========================================
+   RESULTADO DO RELATÓRIO
+========================================== */
+
+.relatorio-impressao {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.relatorio-cabecalho {
+    margin-bottom: 25px;
+}
+
+.relatorio-cabecalho h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.relatorio-cabecalho p {
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.relatorio-informacoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 30px;
+    margin-bottom: 20px;
+}
+
+.relatorio-informacoes p {
+    margin-bottom: 5px;
+}
+
+.relatorio-tabela {
+    width: 100%;
+    margin-bottom: 20px;
+    vertical-align: middle;
+}
+
+.relatorio-tabela th {
+    background: #f1f3f5;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.relatorio-tabela td,
+.relatorio-tabela th {
+    padding: 10px;
+    font-size: 13px;
+}
+
+.relatorio-botoes {
+    margin-top: 20px;
+}
+
+.relatorio-rodape {
+    display: none;
+}
+
+
+/* ==========================================
+   IMPRESSÃO / PDF
+========================================== */
+
+@media print {
+
+    @page {
+        size: landscape;
+        margin: 12mm;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    #relatorioFrete,
+    #relatorioFrete * {
+        visibility: visible !important;
+    }
+
+    #relatorioFrete {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+
+    .relatorio-cabecalho {
+        margin-bottom: 18px;
+    }
+
+    .relatorio-cabecalho h2 {
+        font-size: 20px;
+        color: #000 !important;
+    }
+
+    .relatorio-cabecalho p {
+        color: #333 !important;
+        font-size: 11px;
+    }
+
+    .relatorio-informacoes {
+        display: flex !important;
+        gap: 8px 25px;
+        margin-bottom: 15px;
+    }
+
+    .relatorio-informacoes p {
+        font-size: 10px;
+        color: #000 !important;
+    }
+
+    .relatorio-tabela {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        page-break-inside: auto;
+    }
+
+    .relatorio-tabela thead {
+        display: table-header-group;
+    }
+
+    .relatorio-tabela tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    .relatorio-tabela th,
+    .relatorio-tabela td {
+        border: 1px solid #777 !important;
+        padding: 6px !important;
+        font-size: 9px !important;
+        color: #000 !important;
+        background: #fff !important;
+    }
+
+    .relatorio-tabela th {
+        font-weight: bold !important;
+        background: #eee !important;
+    }
+
+    .relatorio-rodape {
+        display: block !important;
+        margin-top: 20px;
+        padding-top: 8px;
+        border-top: 1px solid #ccc;
+        font-size: 9px;
+        color: #555 !important;
+    }
+
+    .table-responsive {
+        overflow: visible !important;
+    }
+
+}
+
+
+/* =====================================
+   IMPRESSÃO DO RELATÓRIO DE FRETE
+===================================== */
+
+@media print {
+
+    body {
+        background: #fff !important;
+    }
+
+    .container-principal {
+        display: block !important;
+    }
+
+    .menu-lateral,
+    .area-menu,
+    header,
+    .btn,
+    button {
+        display: none !important;
+    }
+
+    .area-conteudo {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    #relatorioFrete {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 20px !important;
+    }
+}
