@@ -1,76 +1,71 @@
 
 <?php
 
-    require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
 
-    // Verifica se a lista de transportadores existe.
-    if (!isset($_SESSION['transportadores'])) {
-        $_SESSION['transportadores'] = [];
-    }
+if (!isset($_SESSION['transportadores'])) {
+    $_SESSION['transportadores'] = [];
+}
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        // Recebe os dados enviados.
-        $nome = trim($_POST['nome'] ?? '');
-        $documento = trim($_POST['documento'] ?? '');
-        $telefone = trim($_POST['telefone'] ?? '');
-        $email = trim($_POST['email'] ?? '');
+    $nome = trim($_POST['nome'] ?? '');
+    $documento = trim($_POST['documento'] ?? '');
+    $telefone = trim($_POST['telefone'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $endereco = trim($_POST['endereco'] ?? '');
+    $obs = trim($_POST['obs'] ?? '');
 
-        // Verifica se todos os campos foram preenchidos.
-        if (
-            $nome != '' &&
-            $documento != '' &&
-            $telefone != '' &&
-            $email != ''
-        ) {
+    if ($nome !== '' && $documento !== '') {
 
-            // Verifica se a ação é uma atualização.
-            if (($_POST['acao'] ?? '') == 'atualizar') {
+        // EDIÇÃO
+        if (($_POST['acao'] ?? '') === 'atualizar') {
 
-                // Recebe o ID do transportador.
-                $id = (int)($_POST['id'] ?? 0);
+            $id = (int)($_POST['id'] ?? 0);
 
-                // Procura o transportador que será atualizado.
-                foreach ($_SESSION['transportadores'] as $indice => $transportador) {
+            foreach ($_SESSION['transportadores'] as $indice => $transportador) {
 
-                    if ($transportador['id'] == $id) {
+                if ((int)$transportador['id'] === $id) {
 
-                        // Atualiza os dados do cadastro.
-                        $_SESSION['transportadores'][$indice]['nome'] = $nome;
-                        $_SESSION['transportadores'][$indice]['documento'] = $documento;
-                        $_SESSION['transportadores'][$indice]['telefone'] = $telefone;
-                        $_SESSION['transportadores'][$indice]['email'] = $email;
+                    $_SESSION['transportadores'][$indice]['nome'] = $nome;
+                    $_SESSION['transportadores'][$indice]['documento'] = $documento;
+                    $_SESSION['transportadores'][$indice]['telefone'] = $telefone;
+                    $_SESSION['transportadores'][$indice]['email'] = $email;
+                    $_SESSION['transportadores'][$indice]['endereco'] = $endereco;
+                    $_SESSION['transportadores'][$indice]['obs'] = $obs;
 
-                        break;
-                    }
+                    break;
                 }
-
-                // Recupera o termo da pesquisa.
-                $pesquisa = trim($_POST['pesquisa'] ?? '');
-
-                // Retorna para a consulta mantendo a pesquisa.
-                header("Location: ../paginas/transportadores.php?pesquisa=" . urlencode($pesquisa));
-                exit;
-
-            } else {
-
-                // Identificador para o novo transportador.
-                $id = count($_SESSION['transportadores']) + 1;
-
-                // Adiciona o novo cadastro.
-                $_SESSION['transportadores'][] = [
-                    'id' => $id,
-                    'nome' => $nome,
-                    'documento' => $documento,
-                    'telefone' => $telefone,
-                    'email' => $email
-                ];
-
-                // Retorna para a página de transportadores.
-                header("Location: ../paginas/transportadores.php");
-                exit;
             }
+
+            header("Location: ../paginas/transportadores.php?matricula=" . $id);
+            exit;
+
+        } else {
+
+            // NOVO CADASTRO
+            $maiorId = 0;
+
+            foreach ($_SESSION['transportadores'] as $transportador) {
+                $maiorId = max($maiorId, (int)$transportador['id']);
+            }
+
+            $id = $maiorId + 1;
+
+            $_SESSION['transportadores'][] = [
+                'id' => $id,
+                'nome' => $nome,
+                'documento' => $documento,
+                'telefone' => $telefone,
+                'email' => $email,
+                'endereco' => $endereco,
+                'obs' => $obs
+            ];
+
+            header("Location: ../paginas/transportadores.php?matricula=" . $id);
+            exit;
         }
     }
+}
 
 ?>

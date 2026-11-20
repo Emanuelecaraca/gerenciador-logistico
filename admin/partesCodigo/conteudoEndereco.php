@@ -1,7 +1,12 @@
 <?php
-	// Verifica se existe um endereço selecionado para edição.
-	$enderecoEdicao = $_SESSION['endereco_edicao'] ?? null;
-	
+
+
+
+$enderecoEdicao = $_SESSION['endereco_edicao'] ?? null;
+
+$_SESSION['transportadores'] = $_SESSION['transportadores'] ?? [];
+$_SESSION['endereco'] = $_SESSION['endereco'] ?? [];
+
 ?>
 
 <div class="container mt-4">
@@ -40,6 +45,49 @@
 
 				<input type="hidden" name="id" value="<?php echo $enderecoEdicao['id'] ?? ''; ?>">
 
+
+				<div class="mb-3 position-relative">
+				    <label for="pesquisaTransportador" class="form-label">
+				        Transportador
+				    </label>
+
+				    <input
+				        type="text"
+				        id="pesquisaTransportador"
+				        class="form-control"
+				        placeholder="Pesquise pela matrícula ou nome..."
+				        autocomplete="off"
+				        value=""
+				    >
+
+				    <input
+				        type="hidden"
+				        name="transportador"
+				        id="idTransportador"
+				        value="<?php echo (int)($enderecoEdicao['transportador'] ?? 0); ?>"
+				    >
+
+				    <div
+				        id="resultadosTransportadores"
+				        class="list-group position-absolute w-100"
+				        style="z-index: 1000; display: none;"
+				    ></div>
+				</div>
+
+				<!-- Dados dos transportadores para a pesquisa -->
+				<div id="listaTransportadores" style="display: none;">
+
+				    <?php foreach ($_SESSION['transportadores'] as $transportador): ?>
+
+				        <div
+				            class="transportador-item"
+				            data-id="<?php echo (int)$transportador['id']; ?>"
+				            data-nome="<?php echo htmlspecialchars($transportador['nome'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+				        ></div>
+
+				    <?php endforeach; ?>
+
+				</div>
 				<!-- cep -->
 				<div class="mb-3">
 					<label for="cep" class="form-label">Cep</label>

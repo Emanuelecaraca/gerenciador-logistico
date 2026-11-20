@@ -27,4 +27,7 @@ include("../partesCodigo/head.php");
     <script src="../js/cep.js"></script>
 
 </body>
+
+<script src="../js/cep.js"></script>
+<script src="../js/pesquisaTransportadorEndereco.js"></script>
 </html>

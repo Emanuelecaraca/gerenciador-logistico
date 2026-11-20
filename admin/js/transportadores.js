@@ -46,6 +46,60 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalErro = new bootstrap.Modal(modalErroElemento);
         modalErro.show();
     }
+
+    // PESQUISA DE TRANSPORTADORES
+        const campoPesquisa = document.getElementById('pesquisaTransportadorModal');
+
+        if (campoPesquisa) {
+
+            campoPesquisa.addEventListener('input', function () {
+
+                const termo = this.value
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .trim();
+
+                const linhas = document.querySelectorAll('.linha-transportador');
+                const mensagem = document.getElementById('mensagemPesquisaTransportador');
+
+                let encontrados = 0;
+
+                linhas.forEach(function (linha) {
+
+                    const dados = linha.dataset.pesquisa
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+
+                    const corresponde = termo !== '' && dados.includes(termo);
+
+                    linha.style.display = corresponde ? '' : 'none';
+
+                    if (corresponde) {
+                        encontrados++;
+                    }
+
+                });
+
+                if (termo === '') {
+
+                    mensagem.innerHTML = 'Digite a matrícula, o nome ou o CPF/CNPJ para pesquisar.';
+                    mensagem.style.display = '';
+
+                } else if (encontrados === 0) {
+
+                    mensagem.innerHTML = 'Nenhum transportador encontrado.';
+                    mensagem.style.display = '';
+
+                } else {
+
+                    mensagem.style.display = 'none';
+
+                }
+
+            });
+
+        }
 });
 
 
