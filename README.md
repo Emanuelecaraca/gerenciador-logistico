@@ -1,6 +1,5 @@
 
 # Gerenciador Logístico 🚚
->>>>>>> 9c6abf6 (Atualizações)
 
 Sistema gerenciamento logístico desenvolvido como atividade prática objetiva do curso de **Tecnologia em Análise e Desenvolvimento de Sistemas (TADS)**.
 
