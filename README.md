@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-# Gerenciamento Logístico 🚚
-=======
+
 # Gerenciador Logístico 🚚
 >>>>>>> 9c6abf6 (Atualizações)
 
