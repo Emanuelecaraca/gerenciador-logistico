@@ -1,4 +1,4 @@
-# EMANTRAX LOGÍSTICA 🚚
+# Gerenciamento Logístico 🚚
 
 Sistema gerenciamento logístico desenvolvido como atividade prática objetiva do curso de **Tecnologia em Análise e Desenvolvimento de Sistemas (TADS)**.
 
