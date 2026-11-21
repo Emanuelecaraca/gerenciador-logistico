@@ -1,6 +1,6 @@
-<header>
+<header class="header-geral">
     <div class="titulo-sistema">
-        Gerenciamento Logístico
+        Gerenciador Logístico
     </div>
 
     <div class="header-usuario">

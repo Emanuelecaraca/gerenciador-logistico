@@ -286,22 +286,24 @@ nav.recolhido .botao-menu {
                CABEÇALHO
 ===================================== */
 
+.titulo-sistema {
+    font-size: 23px;
+    font-weight: 700;
+    color: #17243a;
+    margin: 0;
+
+}
+
+
 header {
 
-    background-color: #ffffff;
+    background-color: #f4f6f9;
 
     display: flex;
-
     align-items: center;
+    justify-content: space-between;
 
-    /* divide os elementos entre as extremidades */
-    justify-content: flex-end;
-
-    /*permite que os elementos quebrem linhas*/
-    flex-wrap: wrap;
-
-    /*linha na parte inferior */
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: none;
 
     padding: 12px 30px;
     width: 100%;
@@ -319,12 +321,7 @@ header h1 {
    margin: 0;
 }
 
-.titulo-sistema {
-    font-size: 20px;
-    font-weight: 600;
-    color: #17243a;
-    margin-right: auto;
-}
+
 /* =====================================
           PAINEL E ATALHOS
 ===================================== */
@@ -624,6 +621,7 @@ main ul li a:hover {
 
 /* Links */
 .atalhos ul li a {
+    
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -829,10 +827,12 @@ main ul li a:hover {
     /* Ajusta o cabeçalho */
     header {
         padding: 16px 18px;
+
     }
 
     header h1 {
         font-size: 19px;
+
     }
 
    
@@ -942,3 +942,42 @@ main ul li a:hover {
 
 
 
+
+.card-header {
+    background-color: #e3e9f5;
+    color: #17243a;
+    border-bottom: 1px solid #e9eef8;
+}
+
+
+
+.titulo-produtos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #17243a;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.titulo-produtos i {
+    font-size: 25px;
+}
+
+.table thead th {
+    background-color: #e3e9f5;
+}
+
+.titulo-pagina{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #17243a;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.header-geral{
+    border: 0.5px solid #e9eef8;
+
+}

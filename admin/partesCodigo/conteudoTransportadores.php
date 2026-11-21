@@ -152,8 +152,10 @@ if ($transportadorExibido !== null) {
     <!-- TÍTULO E BOTÕES -->
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h2 class="mb-0">Transportadores</h2>
-
+        <h2 class="titulo-pagina">
+            <i class="bi bi-truck"></i>
+            Transportadores
+        </h2>
         <div class="d-flex gap-2">
 
             
@@ -604,7 +606,7 @@ if ($transportadorExibido !== null) {
                     data-bs-target="#conteudo-fretes"
                     type="button" role="tab">
 
-                <i class="bi bi-truck"></i> Fretes
+                <i class="bi bi-file-earmark-text"></i> Fretes
 
             </button>
 
@@ -892,9 +894,13 @@ if ($transportadorExibido !== null) {
      id="conteudo-enderecos" role="tabpanel">
 
     <div class="card mb-4">
+
+        <div class="card-header">
+            <h5 class="mb-0">Endereços vinculados</h5>
+        </div>
         <div class="card-body">
 
-            <h5 class="mb-3">Endereços do Transportador</h5>
+            
 
             <?php if (!empty($enderecosParaExibir)): ?>
 

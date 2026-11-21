@@ -71,8 +71,10 @@ function enderecoCadastroFrete($lista, $id) {
     <!-- TÍTULO E BOTÃO NOVO FRETE -->
     <div class="d-flex justify-content-between align-items-center mb-3">
 
-        <h2 class="mb-0">Fretes</h2>
-
+        <h2 class="titulo-produtos mb-0">
+            <i class="bi bi-file-earmark-text-fill"></i>
+            Fretes
+        </h2>
         <button type="button" id="btn-novo-frete" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> Novo frete
         </button>

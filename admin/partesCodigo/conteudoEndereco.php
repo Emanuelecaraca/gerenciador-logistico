@@ -14,7 +14,10 @@ $_SESSION['endereco'] = $_SESSION['endereco'] ?? [];
 	 <!-- TÍTULO + BOTÃO DE NOVO CADASTRO -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
 
-	    <h2 class="mb-0">Endereços</h2>
+	    <h2 class="titulo-produtos mb-0">
+	        <i class="bi bi-geo-alt-fill"></i>
+	        Endereços
+	    </h2>
 
 	    <button type="button" id="btn-novo-endereco" class="btn btn-primary">
 	        Novo cadastro

@@ -8,8 +8,11 @@ $produtos = $_SESSION['produtos'] ?? [];
 
 	<!-- TÍTULO + BOTÃO DE NOVO CADASTRO -->
 	<div class="d-flex justify-content-between align-items-center mb-3">
-		<h2 class="mb-0">Produtos</h2>
-		<button type="button" id="btn-novo" class="btn btn-primary">Novo cadastro</button>
+		<h2 class="titulo-produtos mb-0">
+	        <i class="bi bi-box-seam-fill"></i>
+	        Produtos
+	    </h2>
+		<button type="button" id="btn-novo" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Novo cadastro</button>
 	</div>
 
 	<!-- PESQUISA -->
@@ -26,6 +29,7 @@ $produtos = $_SESSION['produtos'] ?? [];
 
 	<!-- TABELA -->
 	<div class="table-responsive">
+		
 		<table class="table table-bordered table-striped align-middle">
 			<thead>
 				<tr>
@@ -80,7 +84,8 @@ $produtos = $_SESSION['produtos'] ?? [];
 				<?php endif; ?>
 			</tbody>
 		</table>
-	</div>
+	</div>   <!-- FECHAMENTO TABELA-->
+	
 
 </div>
 
