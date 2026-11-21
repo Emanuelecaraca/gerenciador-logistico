@@ -1,10 +1,12 @@
-
+<?php
+require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
+?>
 <main>
     <section class="boas-vindas">
 
         <div class="texto-boas-vindas">
 
-            <h2>Olá, Admin!</h2>
+            <h2>Olá, <?php echo htmlspecialchars($_SESSION['usuario']['nome'] ?? 'Usuário'); ?></h2>
 
             <h3>Bem-vindo ao sistema de gerenciamento logístico.</h3>
 

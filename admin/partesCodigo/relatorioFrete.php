@@ -96,8 +96,6 @@ function buscarEnderecoRelatorio($lista, $id) {
                     onclick="window.print()">
 
                 <i class="bi bi-printer"></i>
-                Imprimir / Salvar PDF
-
             </button>
 
         </div>
@@ -246,29 +244,19 @@ function buscarEnderecoRelatorio($lista, $id) {
 
         <?php if (!empty($produtosFrete)): ?>
 
-            <ul class="list-group">
+            <?php foreach ($produtosFrete as $idProduto): ?>
 
-                <?php foreach ($produtosFrete as $idProduto): ?>
+                <p class="mb-1">
+                    <?php
+                    echo htmlspecialchars(
+                        buscarCadastroRelatorio($produtos, $idProduto),
+                        ENT_QUOTES,
+                        'UTF-8'
+                    );
+                    ?>
+                </p>
 
-                    <div>
-                        <?php foreach ($produtosFrete as $idProduto): ?>
-
-                            <p class="mb-1">
-                                <?php
-                                echo htmlspecialchars(
-                                    buscarCadastroRelatorio($produtos, $idProduto),
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                );
-                                ?>
-                            </p>
-
-                        <?php endforeach; ?>
-                    </div>
-
-                <?php endforeach; ?>
-
-            </ul>
+            <?php endforeach; ?>
 
         <?php else: ?>
 
@@ -278,7 +266,8 @@ function buscarEnderecoRelatorio($lista, $id) {
 
         <?php endif; ?>
 
-    <?php endif; ?>
+     <?php endif; ?>
+
 
 </main>
 

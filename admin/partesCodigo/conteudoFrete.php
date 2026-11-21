@@ -155,9 +155,7 @@ function enderecoCadastroFrete($lista, $id) {
 
                             </div>
 
-                            <div id="produtos-selecionados-frete"
-                                 class="d-flex flex-wrap gap-2 mt-2">
-                            </div>
+                            
 
                         </div>
 

@@ -696,10 +696,10 @@ if ($transportadorExibido !== null) {
                                 Obs.
                             </label>
 
-                            <div class="form-control bg-light">
-                                <?php echo htmlspecialchars($transportadorExibido['obs'] ?? ''); ?>
-                            </div>
-
+                                <input type="text"
+                                       class="form-control bg-light"
+                                       value="<?php echo $transportadorExibido['obs'] ?? ''; ?>"
+                                       readonly>
                         </div>
 
                     </div>

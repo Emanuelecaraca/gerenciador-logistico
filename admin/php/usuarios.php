@@ -8,6 +8,12 @@ $usuarios = [
         'nome' => 'Administrador',
         'email' => 'admin@gerenciador.com',
         'senha' => password_hash('Admin@123', PASSWORD_DEFAULT)
+    ],
+
+    [
+        'nome' => 'Emanuele',
+        'email' => 'Emanuele@gerenciador.com',
+        'senha' => password_hash('Emanuele@123', PASSWORD_DEFAULT)
     ]
 
 ];
