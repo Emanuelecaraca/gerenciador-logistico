@@ -154,9 +154,42 @@ require_once __DIR__ . '/../partesCodigo/verificarLogin.php';
                             <td><?= htmlspecialchars($cidadeDestino) ?></td>
                             <td><?= htmlspecialchars($nomeTransportador) ?></td>
                             <td>
-                                <span class="status-frete status-<?= strtolower($frete['status']) ?>">
-                                    <?= htmlspecialchars($frete['status']) ?>
+
+                                <?php
+
+                                $statusAtual = $frete['status'] ?? 'Programado';
+
+                                // Padroniza os nomes antigos.
+                                $statusAntigo = [
+                                    'No destino / Em descarga' => 'Em descarga',
+                                    'Rota concluída / Finalizado' => 'Finalizado',
+                                    'Rota concluída' => 'Finalizado'
+                                ];
+
+                                if (isset($statusAntigo[$statusAtual])) {
+                                    $statusAtual = $statusAntigo[$statusAtual];
+                                }
+
+                                // Utiliza as mesmas classes da página Fretes.
+                                $coresStatus = [
+                                    'Programado' => 'status-programado',
+                                    'Em carregamento' => 'status-carregamento',
+                                    'Aguardando saída' => 'status-saida',
+                                    'Em trânsito' => 'status-transito',
+                                    'Em parada' => 'status-parada',
+                                    'Em ocorrência' => 'status-ocorrencia',
+                                    'Em descarga' => 'status-descarga',
+                                    'Finalizado' => 'status-concluido'
+                                ];
+
+                                $classeStatus = $coresStatus[$statusAtual] ?? 'status-programado';
+
+                                ?>
+
+                                <span class="status-frete <?= $classeStatus ?>">
+                                    <?= htmlspecialchars($statusAtual, ENT_QUOTES, 'UTF-8') ?>
                                 </span>
+
                             </td>
                         </tr>
 
