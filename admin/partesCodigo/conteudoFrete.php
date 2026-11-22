@@ -127,6 +127,7 @@ function enderecoCadastroFrete($lista, $id) {
                                 <?php if (!empty($produtos)): ?>
 
                                     <?php foreach ($produtos as $produto): ?>
+                                        
 
                                         <div class="item-produto-frete form-check mb-2">
 

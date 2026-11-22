@@ -94,7 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
 
             // Cadastro de um novo produto.
-            $novoId = count($_SESSION['produtos']) + 1;
+            $maiorId = 0;
+
+            foreach ($_SESSION['produtos'] as $produto) {
+                if ($produto['id'] > $maiorId) {
+                    $maiorId = $produto['id'];
+                }
+            }
+
+            $novoId = $maiorId + 1;
 
             $_SESSION['produtos'][] = [
                 'id' => $novoId,
@@ -104,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'largura' => $largura,
                 'altura' => $altura
             ];
+
         }
     }
 

@@ -82,6 +82,7 @@ if (
 
     // Recebe os produtos selecionados.
     $produtos = array_map('intval', $_POST['produtos'] ?? []);
+    
 
     $produtos = array_values(array_unique(array_filter($produtos, function ($id) {
         return $id > 0;
