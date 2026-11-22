@@ -6,6 +6,36 @@ $produtos = $_SESSION['produtos'] ?? [];
 $transportadores = $_SESSION['transportadores'] ?? [];
 $enderecos = $_SESSION['endereco'] ?? [];
 $veiculos = $_SESSION['veiculos'] ?? [];
+// Inicializa os indicadores dos fretes.
+$totalCarregamento = 0;
+$totalTransito = 0;
+$totalDescarga = 0;
+$totalConcluidos = 0;
+
+// Conta os fretes de acordo com o status atual.
+foreach ($fretes as $frete) {
+
+    $status = $frete['status'] ?? '';
+
+    switch ($status) {
+
+        case 'Em carregamento':
+            $totalCarregamento++;
+            break;
+
+        case 'Em trânsito':
+            $totalTransito++;
+            break;
+
+        case 'Em descarga':
+            $totalDescarga++;
+            break;
+
+        case 'Finalizado':
+            $totalConcluidos++;
+            break;
+    }
+}
 
 // Recebe a data selecionada.
 $dataRelatorio = $_GET['dataRelatorio'] ?? '';
@@ -104,6 +134,90 @@ function produtosFreteRelatorio($frete, $listaProdutos)
     <h2><i class="bi bi-bar-chart-fill"></i>
         Relatórios
     </h2>
+    <!-- INDICADORES DE FRETES -->
+<div class="row g-3 mb-4">
+
+    <!-- Em carregamento -->
+    <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+
+                <div class="fs-2 text-warning">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+
+                <div>
+                    <h3 class="mb-0">
+                        <?= $totalCarregamento ?>
+                    </h3>
+                    <small class="text-muted">Em carregamento</small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Em trânsito -->
+    <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+
+                <div class="fs-2 text-primary">
+                    <i class="bi bi-truck"></i>
+                </div>
+
+                <div>
+                    <h3 class="mb-0">
+                        <?= $totalTransito ?>
+                    </h3>
+                    <small class="text-muted">Em trânsito</small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Em descarga -->
+    <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+
+                <div class="fs-2 text-info">
+                    <i class="bi bi-box-arrow-down"></i>
+                </div>
+
+                <div>
+                    <h3 class="mb-0">
+                        <?= $totalDescarga ?>
+                    </h3>
+                    <small class="text-muted">Em descarga</small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Concluídos -->
+    <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+
+                <div class="fs-2 text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+                    <h3 class="mb-0">
+                        <?= $totalConcluidos ?>
+                    </h3>
+                    <small class="text-muted">Concluídos</small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
     <div class="card mb-4">
         <div class="card-header">
             <h5 class="mb-0">Gerar relatório de fretes</h5>
@@ -127,6 +241,8 @@ function produtosFreteRelatorio($frete, $listaProdutos)
                 <a href="fretes.php" class="btn btn-outline-secondary">Voltar para Fretes</a>
             </form>
         </div>
+
+
     </div>
 
     <?php if ($dataRelatorio !== ''): ?>
